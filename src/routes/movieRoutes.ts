@@ -7,5 +7,5 @@ const movieController = new MovieController();
 
 // Rota para obter todos os filmes
 router.get('/movies', movieController.getAllMovies.bind(movieController));
-
+router.get('/movies/:id', movieController.getMovieByid.bind(movieController));
 export default router;

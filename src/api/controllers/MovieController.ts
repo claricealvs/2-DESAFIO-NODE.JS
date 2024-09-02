@@ -17,4 +17,10 @@ export class MovieController {
       }
     }
   }
+
+  async getMovieByid(req: Request, res: Response) {
+    const id = req.params.id;
+    const movie = await this.movieService.getMovieById(parseInt(id, 10));
+    res.json(movie);
+  }
 }

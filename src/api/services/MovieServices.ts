@@ -18,5 +18,20 @@ export class MovieService {
     }
   }
 
+  async getMovieById(id: number): Promise<Movie | null> {
+    try {
+      const movie = await this.movieRepository.findOne({ where: { id } });
+      return movie ? movie : null;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `Error retrieving movie with ID ${id}: ${error.message}`,
+        );
+      } else {
+        throw new Error('Unknown error retrieving movie');
+      }
+    }
+  }
+
   // Adicione outros métodos de serviço conforme necessário
 }
