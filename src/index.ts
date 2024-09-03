@@ -13,18 +13,6 @@ AppDataSource.initialize() // Inicializa o DataSource
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.connect(); // Conectar ao queryRunner
 
-    // Criar a tabela se não existir
-    await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS temporary_movies (
-        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        name VARCHAR NOT NULL,
-        description VARCHAR NOT NULL,
-        actors TEXT NOT NULL,
-        genre VARCHAR NOT NULL,
-        createdAt DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP)
-      )
-    `);
-
     await queryRunner.release(); // Liberar o queryRunner após a operação
 
     app.use('/api', moviesRoutes, sessionRoutes, ticketRoutes);
