@@ -1,6 +1,8 @@
+import 'reflect-metadata';
 import express from 'express';
-import { AppDataSource } from './data-source';
 import dotenv from 'dotenv';
+import './database/connection';
+import connect from './database/connection';
 
 dotenv.config();
 
@@ -16,12 +18,6 @@ app.get('/', (req, res) => {
 });
 
 // Iniciar a conexão com o banco de dados e o servidor
-AppDataSource.initialize()
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Error during Data Source initialization:', error);
-  });
+app.listen(port, async () => {
+  await connect();
+});
