@@ -1,24 +1,26 @@
 // src/database/entities/Movie.ts
-
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('movies') // Nome da tabela no banco de dados
 export class Movie {
   @PrimaryGeneratedColumn() // Campo da chave primária que é gerado automaticamente
-  id!: number; // Usando o operador de afirmação para indicar que será inicializado mais tarde
+  id!: number;
 
-  @Column() // Nome do filme
+  @Column()
   name!: string;
 
-  @Column() // Descrição do filme
+  @Column()
   description!: string;
 
-  @Column('text') // Armazena uma lista de atores como um array simples
+  @Column('text')
   actors!: string[];
 
-  @Column() // Gênero do filme
+  @Column()
   genre!: string;
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' }) // Data de criação
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  release_date!: Date;
+
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
 }
