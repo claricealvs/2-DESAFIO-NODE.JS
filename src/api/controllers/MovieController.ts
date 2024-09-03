@@ -112,7 +112,8 @@ export class MovieController {
 
   async editMovie(req: Request, res: Response) {
     try {
-      const { name, description, actors, genre, release_date, image } =req.body;
+      const { name, description, actors, genre, release_date, image } =
+        req.body;
 
       const id = req.params.id;
 

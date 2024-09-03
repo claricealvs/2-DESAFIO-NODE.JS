@@ -69,7 +69,6 @@ export class MovieService {
     }
 
     const actorsString = actors.join(',');
-    console.log(actors);
     // Criar novo filme
     const newMovie = this.movieRepository.create({
       name,
