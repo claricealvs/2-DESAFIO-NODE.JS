@@ -1,7 +1,8 @@
 // src/database/entities/Session.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
 
 @Entity('sessions') // Nome da tabela no banco de dados
+@Unique(['room', 'time']) // unicidade
 export class Session {
   @PrimaryGeneratedColumn('uuid') // Campo da chave primária que é gerado automaticamente
   id!: number;
