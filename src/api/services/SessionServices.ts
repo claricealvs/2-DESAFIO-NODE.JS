@@ -11,7 +11,7 @@ export class SessionService {
       if (error instanceof Error) {
         throw new Error(`Error retrieving sessions: ${error.message}`);
       } else {
-        throw new Error(`Unkdown error retrieving sessions`);
+        throw new Error(`Unknown error retrieving sessions`);
       }
     }
   }
