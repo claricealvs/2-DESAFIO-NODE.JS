@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "migration:create": "npm run typeorm migration:create --",
+    "migration:run": "npm run typeorm migration:run -- --dataSource src/database/data-source.ts",
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev --transpile-only src/index.ts",
     "lint": "eslint \"src/**/*.{js,ts}\"",
