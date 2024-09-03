@@ -2,6 +2,5 @@
     "type": "sqlite",
     "database": "./src/database/db.sqlite",
     "entities": ["src/database/entities/*.ts"],
-    "migrations": ["src/database/migrations/*.ts"],
-    "synchronize": true
+    "migrations": ["src/database/migrations/*.ts"]
   }

@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
     process.env.DATABASE_URL?.split(':')[1] || './src/database/db.sqlite',
   entities: [Movie], // Aqui você pode adicionar mais entidades, se necessário
   migrations: [__dirname + '/migrations/*.ts'],
-  synchronize: true, // Mantenha como true apenas em desenvolvimento
+  //synchronize: true, // Mantenha como true apenas em desenvolvimento
 });
 
 AppDataSource.initialize()

@@ -12,8 +12,8 @@ export class Movie {
   @Column()
   description!: string;
 
-  @Column('text')
-  actors!: string[];
+  @Column()
+  actors!: string;
 
   @Column()
   genre!: string;
@@ -23,4 +23,7 @@ export class Movie {
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
+
+  @Column() // Torna o campo opcional
+  image?: string;
 }

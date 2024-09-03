@@ -6,6 +6,9 @@ const router = Router();
 const movieController = new MovieController();
 
 // Rota para obter todos os filmes
+router.get('/movies/:id', movieController.getMovieById.bind(movieController));
 router.get('/movies', movieController.getAllMovies.bind(movieController));
-router.get('/movies/:id', movieController.getMovieByid.bind(movieController));
+
+router.post('/movies', movieController.createMovie.bind(movieController));
+
 export default router;
