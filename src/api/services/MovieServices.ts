@@ -85,5 +85,64 @@ export class MovieService {
 
     return newMovie;
   }
+
+  async updateMovie(
+    id: number,
+    name: string,
+    description: string,
+    actors: string[],
+    genre: string,
+    release_date: string,
+    image: string,
+  ) {
+    const existingMovie = await this.movieRepository.findOne({ where: { id } });
+
+    if (!existingMovie) {
+      throw new Error('Não foi possível encontrar filme para alterar.');
+    }
+
+    const anotherMovieWithSameName = await this.movieRepository.findOne({
+      where: { name },
+    });
+
+    if (anotherMovieWithSameName && anotherMovieWithSameName.id !== id) {
+      throw new Error('Existe outro filme com esse nome!!!.');
+    }
+
+    const MAX_DESCRIPTION_LENGTH = 100;
+    if (description.length > MAX_DESCRIPTION_LENGTH) {
+      throw new Error(
+        `A descrição do filme não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
+      );
+    }
+
+    const releaseDate = new Date(release_date);
+    if (isNaN(releaseDate.getTime())) {
+      throw new Error(
+        'Data de lançamento inválida. Certifique-se de que a data está no formato correto.',
+      );
+    }
+
+    const actorsString = actors.join(',');
+
+    // Atualizar o filme existente
+    await this.movieRepository.update(id, {
+      name,
+      description,
+      actors: actorsString,
+      genre,
+      release_date: releaseDate,
+      image,
+    });
+
+    // Buscar o filme atualizado
+    const updatedMovie = await this.movieRepository.findOne({ where: { id } });
+
+    if (!updatedMovie) {
+      throw new Error('Erro ao atualizar o filme.');
+    }
+
+    return updatedMovie;
+  }
 }
 // Adicione outros métodos de serviço conforme necessário

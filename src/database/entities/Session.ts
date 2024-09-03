@@ -2,7 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
 
 @Entity('sessions') // Nome da tabela no banco de dados
-@Unique(['room', 'time'])
+@Unique(['room', 'time']) // unicidade
 export class Session {
   @PrimaryGeneratedColumn() // Campo da chave primária que é gerado automaticamente
   id!: number;

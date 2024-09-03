@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('tickets') // Nome da tabela no banco de dados
 export class Ticket {
-  @PrimaryGeneratedColumn('uuid') // Campo da chave primária que é gerado automaticamente
+  @PrimaryGeneratedColumn() // Campo da chave primária que é gerado automaticamente
   id!: number;
 
   @Column()

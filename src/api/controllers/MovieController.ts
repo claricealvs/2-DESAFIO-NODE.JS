@@ -109,4 +109,47 @@ export class MovieController {
       }
     }
   }
+
+  async editMovie(req: Request, res: Response) {
+    try {
+      const { name, description, actors, genre, release_date, image } =req.body;
+
+      const id = req.params.id;
+
+      if (
+        !Array.isArray(actors) ||
+        actors.some((actor) => typeof actor !== 'string')
+      ) {
+        return res
+          .status(400)
+          .json({ error: 'A lista de atores deve ser um array de strings.' });
+      }
+
+      const newMovie = await this.movieService.updateMovie(
+        parseInt(id, 10),
+        name,
+        description,
+        actors,
+        genre,
+        release_date,
+        image,
+      );
+
+      const formatedMovie = {
+        image: newMovie.image,
+        name: newMovie.name,
+        description: newMovie.description,
+        actors: newMovie.actors.split(','),
+        genre: newMovie.genre,
+        release_date: newMovie.release_date,
+      };
+      return res.status(201).json(formatedMovie);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return res.status(400).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
+      }
+    }
+  }
 }
