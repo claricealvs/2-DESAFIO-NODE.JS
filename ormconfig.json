@@ -2,7 +2,7 @@
     "type": "sqlite",
     "database": "src/database/db.sqlite",
     "entities": [
-        "src/api/models/**/*.ts"
+        "src/database/entities/*.ts"
     ],
     "migrations": [
         "src/database/migrations/*.ts"
