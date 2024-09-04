@@ -1,28 +1,27 @@
 import express from 'express';
-import { AppDataSource } from './data-source';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { AppDataSource } from './database/data-source'; // Importando a instância do DataSource
+import moviesRoutes from './routes/movieRoutes';
+import sessionRoutes from './routes/sessionRoutes';
+import ticketRoutes from './routes/ticketRoutes';
+import 'reflect-metadata';
 
 const app = express();
-const port = process.env.PORT || 3000;
-
-// Middleware para parsear JSON
 app.use(express.json());
 
-// Teste de rota
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+AppDataSource.initialize() // Inicializa o DataSource
+  .then(async () => {
+    const queryRunner = AppDataSource.createQueryRunner();
+    await queryRunner.connect(); // Conectar ao queryRunner
 
-// Iniciar a conexão com o banco de dados e o servidor
-AppDataSource.initialize()
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
+    await queryRunner.release(); // Liberar o queryRunner após a operação
+
+    app.use('/api', moviesRoutes, sessionRoutes, ticketRoutes);
+
+    app.listen(3000, () => {
+      console.log('Servidor rodando na porta 3000');
     });
   })
-  .catch((error) => {
+  .catch((error: Error) => {
     console.error('Error during Data Source initialization:', error);
   });
   
