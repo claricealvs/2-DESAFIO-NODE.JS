@@ -14,5 +14,6 @@ router.put('/movies/{movie_id}/sessions/{session_id}/tickets/:id , ticketControl
 router.delete('/movies/{movie_id}/sessions/{session_id}/tickets/:id' , ticketController.deleteTicket.bind(ticketController));
 
 */
+router.post('/movies/:movie_id/sessions/:session_id/tickets', )
 
 export default router;
