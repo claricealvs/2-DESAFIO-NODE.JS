@@ -25,4 +25,26 @@ export class TicketService {
 
         return ticket;
     }
+
+    async updateTicket(
+        id: number,
+        movieId: number,
+        sessionId: number,
+        chair: string,
+        value: number,
+        
+        ): Promise<void>{
+            const existingTicket = await this.ticketRepository.findOne({ where: { id } });
+
+            if(!existingTicket){
+                throw new Error('O ingresso não existe.');
+            }
+
+            await this.ticketRepository.update(id, {
+                movieId,
+                sessionId,
+                chair,
+                value,
+            });
+        }
 }
