@@ -53,4 +53,39 @@ export class SessionService {
 
     return newSession;
   }
+
+  async updateSession(
+    id: number,
+    //movie_id: number
+    room: string,
+    capacity: number,
+    day: string,
+    time: string,
+  ) {
+    // Verificar se a sessão já existe
+    const existingSession = await this.sessionRepository.findOne({
+      where: { room, time },
+    });
+
+    if (existingSession) {
+      throw new Error('Sessões não podem ocorrer no mesmo horário.');
+    }
+
+    await this.sessionRepository.update(id, {
+      room,
+      capacity,
+      day,
+      time,
+    });
+
+    const updateSession = await this.sessionRepository.findOne({
+      where: { id },
+    });
+
+    if (!updateSession) {
+      throw new Error('Erro ao atualizar a sessão.');
+    }
+
+    return updateSession;
+  }
 }
