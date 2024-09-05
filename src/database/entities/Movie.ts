@@ -20,10 +20,4 @@ export class Movie {
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   release_date!: Date;
-
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt!: Date;
-
-  @Column() // Torna o campo opcional
-  image?: string;
 }
