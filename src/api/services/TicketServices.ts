@@ -5,8 +5,8 @@ export class TicketService {
     private ticketRepository = AppDataSource.getRepository(Ticket);
 
     async createTicket(
-        movieId: number,
-        sessionId: number,
+        movieId: string,
+        sessionId: string,
         chair: string,
         value: number,
     
