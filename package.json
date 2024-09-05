@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
-    "migration:create": "npm run typeorm migration:create --",
-    "migration:run": "npm run typeorm migration:run -- --dataSource src/database/data-source.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:run": "npm run typeorm migration:run",
+    "migration:create": "npm run typeorm migration:create",
+    "migration:revert": "npm run typeorm migration:revert",
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev --transpile-only src/index.ts",
     "lint": "eslint \"src/**/*.{js,ts}\"",
@@ -15,6 +16,8 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.0.0",
     "express": "^4.19.2",
+    "install": "^0.13.0",
+    "npm": "^10.8.3",
     "pg": "^8.7.3",
     "project": "file:",
     "reflect-metadata": "^0.1.13",
@@ -31,7 +34,7 @@
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typeorm": "^0.3.20",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.4"
   }
 }
