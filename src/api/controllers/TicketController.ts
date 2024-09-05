@@ -7,19 +7,42 @@ export class TicketController {
   async createTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
-      const movie_id = req.params.movie_id;
-      const session_id = req.params.session_id;
+      //   const movie_id = req.params.movie_id;
+      //   const session_id = req.params.session_id;
 
       const ticket = await this.ticketService.createTicket(
         chair,
         value,
-        movie_id,
-        session_id,
+        //movie_id,
+        //session_id,
       );
 
       return res.status(201).json(ticket);
-    } catch (error: err) {
-      return res.status(400).json({ message: error.message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return res.status(400).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
+      }
+    }
+  }
+
+  async updateTicket(req: Request, res: Response) {
+    try {
+      const { chair, value } = req.body;
+      //   const movie_id = req.params.movie_id;
+      //   const session_id = req.params.session_id;
+      const id = req.params.id;
+
+      const ticket = await this.ticketService.updateTicket(id, chair, value);
+
+      return res.status(200).json(ticket);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return res.status(400).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
+      }
     }
   }
 }

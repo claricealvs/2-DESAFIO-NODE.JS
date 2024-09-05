@@ -16,4 +16,6 @@ router.delete('/movies/{movie_id}/sessions/{session_id}/tickets/:id' , ticketCon
 */
 router.post('/movies/:movie_id/sessions/:session_id/tickets', )
 
+router.put('/movies/:movie_id/sessions/:session_id/tickets/:id', )
+
 export default router;

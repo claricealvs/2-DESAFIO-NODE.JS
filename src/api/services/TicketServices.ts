@@ -5,8 +5,8 @@ export class TicketService {
     private ticketRepository = AppDataSource.getRepository(Ticket);
 
     async createTicket(
-        movieId: string,
-        sessionId: string,
+        //movie_id: number,
+        //session_id: number,
         chair: string,
         value: number,
     
@@ -14,8 +14,8 @@ export class TicketService {
     ): Promise<Ticket>{
         const ticket = this.ticketRepository.create(
             {
-                movieId, 
-                sessionId,
+                //movie_id, 
+                //session_id,
                 chair,
                 value,
             }
@@ -27,9 +27,9 @@ export class TicketService {
     }
 
     async updateTicket(
-        id: number,
-        movieId: number,
-        sessionId: number,
+        id: string,
+        // movieId: number,
+        // sessionId: number,
         chair: string,
         value: number,
         
@@ -41,8 +41,8 @@ export class TicketService {
             }
 
             await this.ticketRepository.update(id, {
-                movieId,
-                sessionId,
+                // movieId,
+                // sessionId,
                 chair,
                 value,
             });
