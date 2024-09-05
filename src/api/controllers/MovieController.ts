@@ -13,7 +13,6 @@ export class MovieController {
 
       const formattedMovies = movies.map((movie) => ({
         id: movie.id,
-        image: movie.image,
         name: movie.name,
         description: movie.description,
         actors: movie.actors.split(','),
@@ -53,7 +52,6 @@ export class MovieController {
       // Retornar o filme com os campos na ordem desejada
       return res.status(200).json({
         id: movie.id,
-        image: movie.image,
         name: movie.name,
         description: movie.description,
         actors: movie.actors.split(','), // Mantém como array de strings
@@ -93,7 +91,6 @@ export class MovieController {
       );
 
       const formatedMovie = {
-        image: newMovie.image,
         name: newMovie.name,
         description: newMovie.description,
         actors: newMovie.actors.split(','),
@@ -133,11 +130,9 @@ export class MovieController {
         actors,
         genre,
         release_date,
-        image,
       );
 
       const formatedMovie = {
-        image: newMovie.image,
         name: newMovie.name,
         description: newMovie.description,
         actors: newMovie.actors.split(','),
