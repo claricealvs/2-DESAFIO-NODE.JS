@@ -19,7 +19,19 @@ export class MovieController {
         genre: movie.genre,
         release_date: format(movie.release_date, 'dd/MM/yyyy HH:mm:ss', {
           locale: ptBR,
-        }), // Formatação da data
+        }),
+        sessions: movie.sessions.map((session) => ({
+          id: session.id,
+          room: session.room,
+          capacity: session.capacity,
+          day: session.day,
+          time: session.time,
+          tickets: session.tickets.map((ticket) => ({
+            id: ticket.id,
+            chair: ticket.chair,
+            value: ticket.value,
+          })),
+        })),
       }));
 
       res.json(formattedMovies);

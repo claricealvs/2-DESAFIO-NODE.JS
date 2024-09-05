@@ -1,5 +1,16 @@
 // src/database/entities/Session.ts
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
+
+import { Movie } from './Movie';
+import { Ticket } from './Ticket';
 
 @Entity('sessions') // Nome da tabela no banco de dados
 @Unique(['room', 'time']) // unicidade
@@ -22,4 +33,11 @@ export class Session {
 
   @Column()
   time!: string;
+
+  @ManyToOne(() => Movie, (movie) => movie.sessions)
+  @JoinColumn({ name: 'movie_id' })
+  movie!: Movie;
+
+  @OneToMany(() => Ticket, (ticket) => ticket.session)
+  tickets!: Ticket[];
 }
