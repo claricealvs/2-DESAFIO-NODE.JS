@@ -1,9 +1,11 @@
 import { Repository } from 'typeorm';
 import connect from '../../database/connection';
 import { Session } from '../../database/entities/Session';
+import { Movie } from '../../database/entities/Movie';
 
 export class SessionService {
   private sessionRepository!: Repository<Session>;
+  private movieRepository!: Repository<Movie>;
 
   constructor() {
     this.initializeRepository();
@@ -12,11 +14,14 @@ export class SessionService {
   private async initializeRepository() {
     const connection = await connect();
     this.sessionRepository = connection.getRepository(Session);
+    this.movieRepository = connection.getRepository(Movie);
   }
 
   async getAllSessions() {
     try {
-      return await this.sessionRepository.find();
+      return await this.sessionRepository.find({
+        relations: ['tickets'],
+      });
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Error retrieving sessions: ${error.message}`);
@@ -27,6 +32,7 @@ export class SessionService {
   }
 
   async createSession(
+    movie_id: number,
     room: string,
     capacity: number,
     day: string,
@@ -41,7 +47,14 @@ export class SessionService {
       throw new Error('Sessões não podem ocorrer no mesmo horário.');
     }
 
+    const movie = await this.movieRepository.findOne(movie_id);
+
+    if (!movie) {
+      throw new Error('Filme não encontrado.');
+    }
+
     const newSession = this.sessionRepository.create({
+      movie_id: movie_id,
       room,
       capacity,
       day,
@@ -56,7 +69,7 @@ export class SessionService {
 
   async updateSession(
     id: number,
-    //movie_id: number
+    movie_id: number,
     room: string,
     capacity: number,
     day: string,
@@ -87,5 +100,17 @@ export class SessionService {
     }
 
     return updateSession;
+  }
+
+  async deleteSession(id: string): Promise<void> {
+    const existingSession = await this.sessionRepository.findOne({
+      where: { id },
+    });
+
+    if (!existingSession) {
+      throw new Error('A sessão inserida não existe.');
+    }
+
+    await this.sessionRepository.delete(id);
   }
 }
