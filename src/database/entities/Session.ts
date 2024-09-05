@@ -4,13 +4,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Unique,
-  ManyToOne,
   OneToMany,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 
-import { Movie } from './Movie';
 import { Ticket } from './Ticket';
+import { Movie } from './Movie';
 
 @Entity('sessions') // Nome da tabela no banco de dados
 @Unique(['room', 'time']) // unicidade
@@ -18,13 +18,8 @@ export class Session {
   @PrimaryGeneratedColumn() // Campo da chave primária que é gerado automaticamente
   id!: number;
 
-  /*
   @Column()
   movie_id!: number;
-  */
-
-  @Column()
-  movie_id!: number; // Apenas o ID do filme
 
   @Column()
   room!: string;
