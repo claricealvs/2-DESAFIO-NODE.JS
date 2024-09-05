@@ -8,8 +8,9 @@ export class CreateMovies1725389731936 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'integer',
             isPrimary: true,
+            isGenerated: true,
             generationStrategy: 'increment',
           },
           {
@@ -34,12 +35,7 @@ export class CreateMovies1725389731936 implements MigrationInterface {
           },
           {
             name: 'release_date',
-            type: 'datetime',
-          },
-          {
-            name: 'created_at',
-            type: 'datetime',
-            default: 'now()',
+            type: 'varchar',
           },
         ],
       }),
