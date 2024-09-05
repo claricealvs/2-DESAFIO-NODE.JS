@@ -11,20 +11,11 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// Teste de rota
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+// rotas de movies, session e ticket
+app.use('/api', moviesRoutes, sessionRoutes, ticketRoutes);
 
-    app.listen(3000, () => {
-      console.log('Servidor rodando na porta 3000');
-    });
-  })
-  .catch((error: Error) => {
-    console.error('Error during Data Source initialization:', error);
-  });
-  
 // Iniciar a conexão com o banco de dados e o servidor
 app.listen(3000, async () => {
   await connect();
+  console.log('Servidor rodando na porta 3000');
 });
