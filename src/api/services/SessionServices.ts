@@ -38,7 +38,7 @@ export class SessionService {
     });
 
     if (existingSession) {
-      throw new Error('Sessão já cadastrada.');
+      throw new Error('Sessões não podem ocorrer no mesmo horário.');
     }
 
     const newSession = this.sessionRepository.create({

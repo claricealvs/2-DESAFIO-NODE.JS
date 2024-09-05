@@ -29,7 +29,7 @@ export class CreateTickets1725476895769 implements MigrationInterface {
           },
           {
             name: 'session_id',
-            type: 'int',
+            type: 'integer',
           },
         ],
       }),

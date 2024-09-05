@@ -35,12 +35,7 @@ export class CreateMovies1725389731936 implements MigrationInterface {
           },
           {
             name: 'release_date',
-            type: 'datetime',
-          },
-          {
-            name: 'created_at',
-            type: 'datetime',
-            default: 'CURRENT_TIMESTAMP',
+            type: 'varchar',
           },
         ],
       }),

@@ -28,15 +28,15 @@ export class CreateSessions1725394167545 implements MigrationInterface {
           },
           {
             name: 'day',
-            type: 'datetime',
+            type: 'varchar',
           },
           {
             name: 'time',
-            type: 'datetime',
+            type: 'varchar',
           },
           {
             name: 'movie_id',
-            type: 'int',
+            type: 'integer',
           },
         ],
       }),
