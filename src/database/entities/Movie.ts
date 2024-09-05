@@ -1,11 +1,5 @@
 // src/database/entities/Movie.ts
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Session } from './Session';
 
 @Entity('movies') // Nome da tabela no banco de dados

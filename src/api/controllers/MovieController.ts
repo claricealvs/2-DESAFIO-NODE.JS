@@ -15,13 +15,14 @@ export class MovieController {
         id: movie.id,
         name: movie.name,
         description: movie.description,
-        actors: movie.actors.split(','),
+        actors: movie.actors.split(','), // Separar os atores em um array
         genre: movie.genre,
         release_date: format(movie.release_date, 'dd/MM/yyyy HH:mm:ss', {
           locale: ptBR,
         }),
         sessions: movie.sessions.map((session) => ({
           id: session.id,
+          movie_id: session.movie_id, // Exibir apenas o ID do filme
           room: session.room,
           capacity: session.capacity,
           day: session.day,
