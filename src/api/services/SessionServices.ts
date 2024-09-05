@@ -1,8 +1,18 @@
-import { AppDataSource } from '../../database/data-source';
+import { Repository } from 'typeorm';
+import connect from '../../database/connection';
 import { Session } from '../../database/entities/Session';
 
 export class SessionService {
-  private sessionRepository = AppDataSource.getRepository(Session);
+  private sessionRepository!: Repository<Session>;
+
+  constructor() {
+    this.initializeRepository();
+  }
+
+  private async initializeRepository() {
+    const connection = await connect();
+    this.sessionRepository = connection.getRepository(Session);
+  }
 
   async getAllSessions() {
     try {

@@ -1,8 +1,18 @@
-import { AppDataSource } from '../../database/data-source';
+import { Repository } from 'typeorm';
+import connect from '../../database/connection';
 import { Movie } from '../../database/entities/Movie';
 
 export class MovieService {
-  private movieRepository = AppDataSource.getRepository(Movie);
+  private movieRepository!: Repository<Movie>;
+
+  constructor() {
+    this.initializeRepository();
+  }
+
+  private async initializeRepository() {
+    const connection = await connect();
+    this.movieRepository = connection.getRepository(Movie);
+  }
 
   async getAllMovies() {
     try {
@@ -69,7 +79,6 @@ export class MovieService {
     }
 
     const actorsString = actors.join(',');
-    console.log(actors);
     // Criar novo filme
     const newMovie = this.movieRepository.create({
       name,
@@ -77,7 +86,6 @@ export class MovieService {
       actors: actorsString, // Isso deve ser um array de strings
       genre,
       release_date: releaseDate,
-      image,
     });
 
     // Salvar no banco de dados
@@ -93,7 +101,6 @@ export class MovieService {
     actors: string[],
     genre: string,
     release_date: string,
-    image: string,
   ) {
     const existingMovie = await this.movieRepository.findOne({ where: { id } });
 
@@ -132,7 +139,6 @@ export class MovieService {
       actors: actorsString,
       genre,
       release_date: releaseDate,
-      image,
     });
 
     // Buscar o filme atualizado

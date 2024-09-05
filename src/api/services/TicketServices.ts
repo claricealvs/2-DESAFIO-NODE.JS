@@ -1,8 +1,18 @@
-import { AppDataSource } from '../../database/data-source';
+import { Repository } from 'typeorm';
+import connect from '../../database/connection';
 import { Ticket } from '../../database/entities/Ticket';
 
 export class TicketService {
-  private ticketRepository = AppDataSource.getRepository(Ticket);
+  private ticketRepository!: Repository<Ticket>;
+
+  constructor() {
+    this.initializeRepository();
+  }
+
+  private async initializeRepository() {
+    const connection = await connect();
+    this.ticketRepository = connection.getRepository(Ticket);
+  }
 
   async createTicket(
     //movie_id: number,
