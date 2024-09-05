@@ -1,5 +1,12 @@
 // src/database/entities/Movie.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
+import { Session } from './Session';
 
 @Entity('movies') // Nome da tabela no banco de dados
 export class Movie {
@@ -20,4 +27,7 @@ export class Movie {
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   release_date!: Date;
+
+  @OneToMany(() => Session, (session) => session.movie)
+  sessions!: Session[];
 }

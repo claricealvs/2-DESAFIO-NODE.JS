@@ -54,4 +54,34 @@ export class SessionController {
       }
     }
   }
+
+  async editSession(req: Request, res: Response) {
+    try {
+      const { room, capacity, day, time } = req.body;
+
+      const id = req.params.id;
+
+      const newSession = await this.sessionService.updateSession(
+        parseInt(id, 10),
+        room,
+        capacity,
+        day,
+        time,
+      );
+
+      const formatedSession = {
+        room: newSession.room,
+        capacity: newSession.capacity,
+        day: newSession.day,
+        time: newSession.time,
+      };
+      return res.status(201).json(formatedSession);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return res.status(400).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
+      }
+    }
+  }
 }

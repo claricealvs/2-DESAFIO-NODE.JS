@@ -16,7 +16,9 @@ export class MovieService {
 
   async getAllMovies() {
     try {
-      return await this.movieRepository.find();
+      return await this.movieRepository.find({
+        relations: ['sessions', 'sessions.tickets'],
+      });
     } catch (error) {
       if (error instanceof Error) {
         // Aqui você pode acessar as propriedades do erro com segurança

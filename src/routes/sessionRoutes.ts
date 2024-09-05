@@ -12,9 +12,16 @@ router.get(
   sessionController.getAllSessions.bind(sessionController),
 );
 
+//rota post para teste
 //movies/:movie_id/sessions
 router.post(
   '/session',
+  sessionController.createSession.bind(sessionController),
+);
+
+//rota put para teste
+router.put(
+  '/putSession',
   sessionController.createSession.bind(sessionController),
 );
 
