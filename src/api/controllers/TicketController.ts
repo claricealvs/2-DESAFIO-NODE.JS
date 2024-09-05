@@ -52,7 +52,9 @@ export class TicketController {
 
       await this.ticketService.deleteTicket(id);
 
-      return res.status(200).json({ message: 'Ingresso deletado com sucesso.' });
+      return res
+        .status(200)
+        .json({ message: 'Ingresso deletado com sucesso.' });
     } catch (error: unknown) {
       if (error instanceof Error) {
         return res.status(400).json({ error: error.message });
