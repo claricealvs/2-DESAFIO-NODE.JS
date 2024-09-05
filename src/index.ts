@@ -1,24 +1,22 @@
+import 'reflect-metadata';
 import express from 'express';
-import { AppDataSource } from './database/data-source'; // Importando a instância do DataSource
 import moviesRoutes from './routes/movieRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import ticketRoutes from './routes/ticketRoutes';
-import 'reflect-metadata';
+import dotenv from 'dotenv';
+import connect from './database/connection';
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-AppDataSource.initialize() // Inicializa o DataSource
-  .then(async () => {
-    const queryRunner = AppDataSource.createQueryRunner();
-    await queryRunner.connect(); // Conectar ao queryRunner
+// Teste de rota
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
-    await queryRunner.release(); // Liberar o queryRunner após a operação
-
-    app.use('/api', moviesRoutes, sessionRoutes, ticketRoutes);
-
-    app.listen(3000, () => {
-      console.log('Servidor rodando na porta 3000');
-    });
-  })
-  .catch((error) => console.log('Erro ao conectar ao banco de dados:', error));
+// Iniciar a conexão com o banco de dados e o servidor
+app.listen(3000, async () => {
+  await connect();
+});
