@@ -8,8 +8,9 @@ export class CreateMovies1725389731936 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'integer',
             isPrimary: true,
+            isGenerated: true,
             generationStrategy: 'increment',
           },
           {
@@ -39,7 +40,7 @@ export class CreateMovies1725389731936 implements MigrationInterface {
           {
             name: 'created_at',
             type: 'datetime',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
         ],
       }),

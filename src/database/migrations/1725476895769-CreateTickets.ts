@@ -13,8 +13,9 @@ export class CreateTickets1725476895769 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'integer',
             isPrimary: true,
+            isGenerated: true,
             generationStrategy: 'increment',
           },
           {
