@@ -66,4 +66,13 @@ export class TicketService {
 
     await this.ticketRepository.delete(id);
   }
+
+  async getTicketById(id: string): Promise<Ticket | undefined> {
+    const ticket = this.ticketRepository.findOne({ where: { id } });
+    if (!ticket) {
+      throw new Error('O ingresso não existe.');
+    } else {
+      return ticket;
+    }
+  }
 }
