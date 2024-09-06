@@ -23,11 +23,19 @@ export class SessionController {
       }));
 
       res.json(formattedSessions);
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
-        res.status(500).json({ message: error.message });
+        return res.status(400).json({
+          code: 400,
+          status: 'Bad Request',
+          message: error.message,
+        });
       } else {
-        res.status(500).json({ message: 'Unknown error occurred' });
+        return res.status(500).json({
+          code: 500,
+          status: 'Internal Server Error',
+          message: 'Ocorreu um erro inesperado.',
+        });
       }
     }
   }
@@ -57,7 +65,23 @@ export class SessionController {
       return res.status(201).json(formattedSession);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
+        const code = (error as any).status || 400; // Verifica se o erro tem um status definido, senão usa 400
+
+        let statusMessage = '';
+
+        if (code == 400) {
+          statusMessage = 'Bad Request';
+        }
+
+        if (code == 404) {
+          statusMessage = 'Not Found';
+        }
+
+        return res.status(code).json({
+          code: code,
+          status: statusMessage,
+          message: error.message,
+        });
       } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
       }
@@ -83,7 +107,23 @@ export class SessionController {
       return res.status(201).json(newSession);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
+        const code = (error as any).status || 400; // Verifica se o erro tem um status definido, senão usa 400
+
+        let statusMessage = '';
+
+        if (code == 400) {
+          statusMessage = 'Bad Request';
+        }
+
+        if (code == 404) {
+          statusMessage = 'Not Found';
+        }
+
+        return res.status(code).json({
+          code: code,
+          status: statusMessage,
+          message: error.message,
+        });
       } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
       }
@@ -99,7 +139,23 @@ export class SessionController {
       return res.status(204).json();
     } catch (error: unknown) {
       if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
+        const code = (error as any).status || 400; // Verifica se o erro tem um status definido, senão usa 400
+
+        let statusMessage = '';
+
+        if (code == 400) {
+          statusMessage = 'Bad Request';
+        }
+
+        if (code == 404) {
+          statusMessage = 'Not Found';
+        }
+
+        return res.status(code).json({
+          code: code,
+          status: statusMessage,
+          message: error.message,
+        });
       } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
       }

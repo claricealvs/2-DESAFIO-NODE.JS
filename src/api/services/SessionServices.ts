@@ -52,7 +52,9 @@ export class SessionService {
     const movie = await this.movieRepository.findOne(movie_id);
 
     if (!movie) {
-      throw new Error('Filme não encontrado.');
+      const notFoundError = new Error('Filme não encontrado.');
+      (notFoundError as any).status = 404; // Adiciona um código de status ao erro
+      throw notFoundError;
     }
 
     const regexDay = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
@@ -66,7 +68,6 @@ export class SessionService {
     if (regexTime.test(time) === false) {
       throw new Error('Hora inválida.');
     }
-
     const newSession = this.sessionRepository.create({
       movie_id: movie_id,
       room,
@@ -96,6 +97,14 @@ export class SessionService {
 
     if (existingSession) {
       throw new Error('Sessões não podem ocorrer no mesmo horário.');
+    }
+
+    const movie = await this.movieRepository.findOne(movie_id);
+
+    if (!movie) {
+      const notFoundError = new Error('Filme não encontrado.');
+      (notFoundError as any).status = 404; // Adiciona um código de status ao erro
+      throw notFoundError;
     }
 
     const regexDay = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
