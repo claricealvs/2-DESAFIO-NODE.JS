@@ -10,7 +10,7 @@ import { Session } from './Session';
 @Entity('tickets') // Nome da tabela no banco de dados
 export class Ticket {
   @PrimaryGeneratedColumn() // Campo da chave primária que é gerado automaticamente
-  id!: string;
+  id!: number;
 
   @Column()
   chair!: string;
