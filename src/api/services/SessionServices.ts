@@ -61,6 +61,12 @@ export class SessionService {
       throw new Error('Data inválida.');
     }
 
+    const regexTime = /^(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
+
+    if (regexTime.test(time) === false) {
+      throw new Error('Hora inválida.');
+    }
+
     const newSession = this.sessionRepository.create({
       movie_id: movie_id,
       room,
@@ -96,6 +102,12 @@ export class SessionService {
 
     if (regexDay.test(day) === false) {
       throw new Error('Data inválida.');
+    }
+
+    const regexTime = /^(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
+
+    if (regexTime.test(time) === false) {
+      throw new Error('Hora inválida.');
     }
 
     await this.sessionRepository.update(id, {
