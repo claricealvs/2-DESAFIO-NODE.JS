@@ -56,6 +56,8 @@ export class TicketController {
         return res.status(404).json('O ingresso não existe');
       }
 
+      await this.ticketService.deleteTicket(id);
+
       return res
         .status(200)
         .json({ message: 'Ingresso deletado com sucesso.' });
