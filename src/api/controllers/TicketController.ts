@@ -50,6 +50,12 @@ export class TicketController {
     try {
       const id = req.params.id;
 
+      const ticketDeleted = await this.ticketService.getTicketById(id);
+
+      if (!ticketDeleted) {
+        return res.status(404).json('O ingresso não existe');
+      }
+
       return res
         .status(200)
         .json({ message: 'Ingresso deletado com sucesso.' });
