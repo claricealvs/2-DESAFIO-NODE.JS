@@ -5,6 +5,7 @@ import connect from './database/connection';
 import moviesRoutes from './routes/movieRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import ticketRoutes from './routes/ticketRoutes';
+import documentationRoute from './routes/documentationRoute';
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ const app = express();
 app.use(express.json());
 
 // Middleware para rotas
-app.use('/api', moviesRoutes, sessionRoutes, ticketRoutes);
+app.use('/api', moviesRoutes, sessionRoutes, ticketRoutes, documentationRoute);
 
 async function startServer() {
   try {
