@@ -50,7 +50,9 @@ export class SessionService {
     const movie = await this.movieRepository.findOne(movie_id);
 
     if (!movie) {
-      throw new Error('Filme não encontrado.');
+      const notFoundError = new Error('Filme não encontrado.');
+      (notFoundError as any).status = 404; // Adiciona um código de status ao erro
+      throw notFoundError;
     }
 
     const newSession = this.sessionRepository.create({
@@ -82,6 +84,14 @@ export class SessionService {
 
     if (existingSession) {
       throw new Error('Sessões não podem ocorrer no mesmo horário.');
+    }
+
+    const movie = await this.movieRepository.findOne(movie_id);
+
+    if (!movie) {
+      const notFoundError = new Error('Filme não encontrado.');
+      (notFoundError as any).status = 404; // Adiciona um código de status ao erro
+      throw notFoundError;
     }
 
     await this.sessionRepository.update(id, {
