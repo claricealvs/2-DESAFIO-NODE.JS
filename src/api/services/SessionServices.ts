@@ -44,7 +44,9 @@ export class SessionService {
     });
 
     if (existingSession) {
-      throw new Error('Sessões não podem ocorrer no mesmo horário.');
+      throw new Error(
+        'Sessões não podem ocorrer no mesmo horário e na mesma sala.',
+      );
     }
 
     const movie = await this.movieRepository.findOne(movie_id);
