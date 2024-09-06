@@ -92,6 +92,12 @@ export class SessionService {
       throw new Error('Sessões não podem ocorrer no mesmo horário.');
     }
 
+    const regexDay = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    if (regexDay.test(day) === false) {
+      throw new Error('Data inválida.');
+    }
+
     await this.sessionRepository.update(id, {
       room,
       capacity,
