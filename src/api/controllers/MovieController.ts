@@ -70,6 +70,19 @@ export class MovieController {
         actors: movie.actors.split(','), // Mantém como array de strings
         genre: movie.genre,
         release_date: formattedReleaseDate, // Adiciona a data formatada
+        sessions: movie.sessions.map((session) => ({
+          id: session.id,
+          movie_id: session.movie_id, // Retorna apenas o id do filme
+          room: session.room,
+          capacity: session.capacity,
+          day: session.day,
+          time: session.time,
+          tickets: session.tickets.map((ticket) => ({
+            id: ticket.id,
+            chair: ticket.chair,
+            value: ticket.value,
+          })),
+        })),
       });
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -122,8 +135,7 @@ export class MovieController {
 
   async editMovie(req: Request, res: Response) {
     try {
-      const { name, description, actors, genre, release_date, image } =
-        req.body;
+      const { name, description, actors, genre, release_date } = req.body;
 
       const id = req.params.id;
 
@@ -159,6 +171,24 @@ export class MovieController {
       } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
       }
+    }
+  }
+
+  async deleteMovie(req: Request, res: Response) {
+    const id = req.params.id;
+
+    const movie = await this.movieService.getMovieById(parseInt(id, 10));
+
+    if (!movie) {
+      res.status(404).json({ message: 'Filme não encontrado' });
+    } else if (movie && movie.sessions && movie.sessions.length > 0) {
+      return res.status(400).json({
+        message:
+          'O filme possui sessões cadastradas, remova as sessões antes de excluir o filme',
+      });
+    } else {
+      await this.movieService.deleteMovie(movie.id);
+      res.status(400);
     }
   }
 }

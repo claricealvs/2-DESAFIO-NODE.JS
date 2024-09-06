@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import connect from '../../database/connection';
 import { Movie } from '../../database/entities/Movie';
+import { Ticket } from '../../database/entities/Ticket';
 
 export class MovieService {
   private movieRepository!: Repository<Movie>;
@@ -32,7 +33,10 @@ export class MovieService {
 
   async getMovieById(id: number): Promise<Movie | null> {
     try {
-      const movie = await this.movieRepository.findOne({ where: { id } });
+      const movie = await this.movieRepository.findOne({
+        where: { id },
+        relations: ['sessions', 'sessions.tickets'],
+      });
       return movie ? movie : null;
     } catch (error) {
       if (error instanceof Error) {
@@ -151,6 +155,10 @@ export class MovieService {
     }
 
     return updatedMovie;
+  }
+
+  async deleteMovie(id: number) {
+    await this.movieRepository.delete(id);
   }
 }
 // Adicione outros métodos de serviço conforme necessário

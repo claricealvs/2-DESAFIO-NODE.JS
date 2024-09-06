@@ -8,6 +8,7 @@ const movieController = new MovieController();
 // Rota para obter todos os filmes
 router.get('/movies/:id', movieController.getMovieById.bind(movieController));
 router.put('/movies/:id', movieController.editMovie.bind(movieController));
+router.delete('/movies/:id', movieController.deleteMovie.bind(movieController));
 
 router.get('/movies', movieController.getAllMovies.bind(movieController));
 
