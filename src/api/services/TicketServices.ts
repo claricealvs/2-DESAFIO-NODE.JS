@@ -2,10 +2,12 @@ import { Repository } from 'typeorm';
 import connect from '../../database/connection';
 import { Ticket } from '../../database/entities/Ticket';
 import { Movie } from '../../database/entities/Movie';
+import { Session } from '../../database/entities/Session';
 
 export class TicketService {
   private ticketRepository!: Repository<Ticket>;
   private movieRepository!: Repository<Movie>;
+  private sessionRepository!: Repository<Session>;
 
   constructor() {
     this.initializeRepository();
@@ -85,7 +87,7 @@ export class TicketService {
   }
 
   async verifySession(session_id: number): Promise<boolean> {
-    const session = await this.movieRepository.findOne({
+    const session = await this.sessionRepository.findOne({
       where: { id: session_id },
     });
 
