@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import connect from '../../database/connection';
 import { Session } from '../../database/entities/Session';
 import { Movie } from '../../database/entities/Movie';
@@ -75,31 +75,33 @@ export class SessionService {
     day: string,
     time: string,
   ) {
-    // Verificar se a sessão já existe
+    // Verificar se há outra sessão no mesmo horário e sala (excluindo a que está sendo atualizada)
     const existingSession = await this.sessionRepository.findOne({
-      where: { room, time },
+      where: { room, time }, // Garante que não é a mesma sessão
     });
 
     if (existingSession) {
       throw new Error('Sessões não podem ocorrer no mesmo horário.');
     }
 
-    await this.sessionRepository.update(id, {
+    // Atualizar a sessão
+    const updateResult = await this.sessionRepository.update(id, {
       room,
       capacity,
       day,
       time,
     });
 
-    const updateSession = await this.sessionRepository.findOne({
+    // Verificar se a sessão foi realmente atualizada
+    const updatedSession = await this.sessionRepository.findOne({
       where: { id },
     });
 
-    if (!updateSession) {
-      throw new Error('Erro ao atualizar a sessão.');
+    if (!updatedSession) {
+      throw new Error('Erro ao buscar a sessão atualizada.');
     }
 
-    return updateSession;
+    return updatedSession;
   }
 
   async deleteSession(id: string): Promise<void> {

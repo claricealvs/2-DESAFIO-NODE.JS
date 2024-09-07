@@ -6,6 +6,17 @@ import { SessionController } from '../api/controllers/SessionController';
 const router = Router();
 const sessionController = new SessionController();
 
+//rota put para editar session
+router.put(
+  '/movies/:movie_id/sessions/:id',
+  sessionController.editSession.bind(sessionController),
+);
+
+router.delete(
+  '/movies/:movie_id/sessions/:id',
+  sessionController.deleteSession.bind(sessionController),
+);
+
 //rota get para listar todas as sessions
 router.get(
   '/sessions',
@@ -16,17 +27,6 @@ router.get(
 router.post(
   '/movies/:movie_id/sessions',
   sessionController.createSession.bind(sessionController),
-);
-
-//rota put para editar session
-router.put(
-  '/movies/:movie_id/sessions',
-  sessionController.editSession.bind(sessionController),
-);
-
-router.delete(
-  '/movies/:movie_id/sessions/:id',
-  sessionController.deleteSession.bind(sessionController),
 );
 
 export default router;

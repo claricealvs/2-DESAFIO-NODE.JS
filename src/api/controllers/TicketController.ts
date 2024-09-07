@@ -7,8 +7,8 @@ export class TicketController {
   async createTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
-      //   const movie_id = req.params.movie_id;
-      //   const session_id = req.params.session_id;
+      const movie_id = req.params.movie_id;
+      const session_id = req.params.session_id;
 
       const ticket = await this.ticketService.createTicket(
         chair,
