@@ -76,8 +76,6 @@ export class TicketController {
       const id = req.params.id;
       const ticketDeleted = await this.ticketService.getTicketById(id);
 
-      /* deixa a cadeira livre */
-
       if (!ticketDeleted) {
         return res.status(404).json('O ingresso não existe');
       }
