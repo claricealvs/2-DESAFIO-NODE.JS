@@ -6,7 +6,9 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+
 import { Session } from './Session';
+
 @Entity('tickets') // Nome da tabela no banco de dados
 export class Ticket {
   @PrimaryGeneratedColumn() // Campo da chave primária que é gerado automaticamente
@@ -17,6 +19,9 @@ export class Ticket {
 
   @Column()
   value!: number;
+
+  @Column()
+  session_id!: number;
 
   @ManyToOne(() => Session, (session) => session.tickets)
   @JoinColumn({ name: 'session_id' })
