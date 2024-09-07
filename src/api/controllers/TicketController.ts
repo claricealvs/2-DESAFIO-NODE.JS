@@ -42,6 +42,8 @@ export class TicketController {
   async updateTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
+
+      /* verifica se a cadeira ja esta usada */
       const disponibleChair = await this.ticketService.disponibleChair(chair);
 
       if (disponibleChair) {
@@ -54,8 +56,6 @@ export class TicketController {
 
       //   const movie_id = req.params.movie_id;
       //   const session_id = req.params.session_id;
-
-      /* verifica se a cadeira ja esta usada */
 
       const id = req.params.id;
 
