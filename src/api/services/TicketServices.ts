@@ -75,4 +75,9 @@ export class TicketService {
       return ticket;
     }
   }
+
+  async disponibleChair(chair: string): Promise<boolean> {
+    const ticket = await this.ticketRepository.findOne({ where: { chair } });
+    return !!ticket;
+  }
 }
