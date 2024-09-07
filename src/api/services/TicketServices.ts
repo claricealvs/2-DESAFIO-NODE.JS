@@ -80,4 +80,6 @@ export class TicketService {
     const ticket = await this.ticketRepository.findOne({ where: { chair } });
     return !!ticket;
   }
+
+  /* adicionar service que confere a capacidade e vê se está excedida */
 }
