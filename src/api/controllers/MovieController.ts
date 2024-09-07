@@ -15,14 +15,14 @@ export class MovieController {
         id: movie.id,
         name: movie.name,
         description: movie.description,
-        actors: movie.actors.split(','), // Separar os atores em um array
+        actors: movie.actors.split(','), // Array de atores
         genre: movie.genre,
         release_date: format(movie.release_date, 'dd/MM/yyyy HH:mm:ss', {
           locale: ptBR,
         }),
         sessions: movie.sessions.map((session) => ({
           id: session.id,
-          movie_id: session.movie_id, // Exibir apenas o ID do filme
+          movie_id: session.movie_id, // ID do filme
           room: session.room,
           capacity: session.capacity,
           day: session.day,
@@ -51,28 +51,28 @@ export class MovieController {
     try {
       const movie = await this.movieService.getMovieById(parseInt(id, 10));
 
-      // Verifica se o filme foi encontrado
+      //  Filme não foi encontrado
       if (!movie) {
         return res.status(404).json({ error: 'Filme não encontrado.' });
       }
 
-      // Formatar a release_date se for um objeto Date válido
+      // Formatação da data de lançamento
       const formattedReleaseDate =
         movie.release_date instanceof Date
           ? format(movie.release_date, 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })
-          : null; // Ou outra lógica de tratamento de erro
+          : null;
 
-      // Retornar o filme com os campos na ordem desejada
+      // Ordena os campos do filmes conforme o desejado
       return res.status(200).json({
         id: movie.id,
         name: movie.name,
         description: movie.description,
-        actors: movie.actors.split(','), // Mantém como array de strings
+        actors: movie.actors.split(','), // Atores como array
         genre: movie.genre,
-        release_date: formattedReleaseDate, // Adiciona a data formatada
+        release_date: formattedReleaseDate, // Data formatada
         sessions: movie.sessions.map((session) => ({
           id: session.id,
-          movie_id: session.movie_id, // Retorna apenas o id do filme
+          movie_id: session.movie_id, // ID do filme na seção
           room: session.room,
           capacity: session.capacity,
           day: session.day,
@@ -104,7 +104,7 @@ export class MovieController {
       ) {
         return res
           .status(400)
-          .json({ error: 'A lista de atores deve ser um array de strings.' });
+          .json({ error: 'A lista de atores deve ser um array de strings.' }); // Formato da lista de atores
       }
 
       const newMovie = await this.movieService.createMovie(
@@ -113,7 +113,6 @@ export class MovieController {
         actors,
         genre,
         release_date,
-        image,
       );
 
       const formatedMovie = {

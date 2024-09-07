@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import connect from '../../database/connection';
 import { Session } from '../../database/entities/Session';
 import { Movie } from '../../database/entities/Movie';
@@ -52,9 +52,7 @@ export class SessionService {
     const movie = await this.movieRepository.findOne(movie_id);
 
     if (!movie) {
-      const notFoundError = new Error('Filme não encontrado.');
-      (notFoundError as any).status = 404; // Adiciona um código de status ao erro
-      throw notFoundError;
+      throw new Error('Filme não encontrado');
     }
 
     const regexDay = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
@@ -90,9 +88,9 @@ export class SessionService {
     day: string,
     time: string,
   ) {
-    // Verificar se a sessão já existe
+    // Verificar se há outra sessão no mesmo horário e sala (excluindo a que está sendo atualizada)
     const existingSession = await this.sessionRepository.findOne({
-      where: { room, time },
+      where: { room, time }, // Garante que não é a mesma sessão
     });
 
     if (existingSession) {
@@ -102,9 +100,7 @@ export class SessionService {
     const movie = await this.movieRepository.findOne(movie_id);
 
     if (!movie) {
-      const notFoundError = new Error('Filme não encontrado.');
-      (notFoundError as any).status = 404; // Adiciona um código de status ao erro
-      throw notFoundError;
+      throw new Error('Filme não encontrado');
     }
 
     const regexDay = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
@@ -126,15 +122,16 @@ export class SessionService {
       time,
     });
 
-    const updateSession = await this.sessionRepository.findOne({
+    // Verificar se a sessão foi realmente atualizada
+    const updatedSession = await this.sessionRepository.findOne({
       where: { id },
     });
 
-    if (!updateSession) {
-      throw new Error('Erro ao atualizar a sessão.');
+    if (!updatedSession) {
+      throw new Error('Erro ao buscar a sessão atualizada.');
     }
 
-    return updateSession;
+    return updatedSession;
   }
 
   async deleteSession(id: string): Promise<void> {
