@@ -1,0 +1,718 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Essa API REST realiza o gerenciamento da uma bilheteria de cinema, no qual contém filmes, sessões e bilhetes. Cada sessão terá um filme com uma capacidade de lugares que será limitada, além do horário. A cadeira da sessão também deve ser única. Cada sessão pode ter vários ingressos. E cada ingresso terá uma cadeira e um valor.",
+    "version": "0.0.1",
+    "title": "Compacine",
+    "contact": {
+      "name": "Rayan Junio, Eduardo Gonçalves, Julyana Mira, Diogo Nogueira, Clarice Alves"
+    }
+  },
+  "host": "localhost:3000",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/movies": {
+      "post": {
+        "summary": "Cadastrar filme",
+        "description": "Este endpoint cadastra um filme no sistema.",
+        "tags": [
+          "Movies"
+        ],
+        "parameters": [
+          {
+            "name": "movie",
+            "in": "body",
+            "description": "Filme a ser cadastrado",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MovieWithoutId"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retorna o filme cadastrado",
+            "schema": {
+              "$ref": "#/definitions/MovieWithoutSessions"
+            }
+          },
+          "400": {
+            "description": "A lista de atores deve ser um array de strings."
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      },
+      "get": {
+        "summary": "Listar Filmes",
+        "description": "Este endpoint retorna todos os filmes cadastrados no sistema",
+        "tags": [
+          "Movies"
+        ],
+        "responses": {
+          "200": {
+            "description": "Uma lista de filmes",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Movie"
+              }
+            }
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      }
+    },
+    "/api/movies/{id}": {
+      "get": {
+        "summary": "Buscar filme específico",
+        "description": "Este endpoint retorna um filme específico com base no id de entrada",
+        "tags": [
+          "Movies"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do filme",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filme com o ID fornecido.",
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          },
+          "404": {
+            "description": "Filme não encontrado"
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar filme",
+        "description": "Este endpoint atualiza um filme no qual é informado o **ID** e retorna o filme atualizado.",
+        "tags": [
+          "Movies"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do Movie",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "movie",
+            "in": "body",
+            "description": "Novo filme",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MovieWithoutId"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Filme atualizado com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/MovieWithoutSessions"
+            }
+          },
+          "400": {
+            "description": "A lista de atores deve ser um array de strings."
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar filme",
+        "description": "Este endpoint deleta um filme no qual é informado o **ID** e retorna o status da requisição.",
+        "tags": [
+          "Movies"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do Movie",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Filme deletado com sucesso."
+          },
+          "400": {
+            "description": "O filme possui sessões cadastradas, remova as sessões antes de excluir o filme."
+          },
+          "404": {
+            "description": "Filme não encontrado."
+          }
+        }
+      }
+    },
+    "/api/movies/{movie_id}/sessions": {
+      "post": {
+        "summary": "Cadastrar sessão",
+        "description": "Este endpoint cria uma nova sessão e o retorna para o usuário",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "name": "movie_id",
+            "in": "path",
+            "description": "ID do filme relacionado à sessão",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "session",
+            "in": "body",
+            "description": "Session a ser cadastrada.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SessionWithoutIdAndMovieId"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retorna a sessão cadastrada.",
+            "schema": {
+              "$ref": "#/definitions/SessionWithoutTicket"
+            }
+          },
+          "404": {
+            "description": "Filme não encontrado."
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      }
+    },
+    "/api/movies/{movie_id}/sessions/{id}": {
+      "put": {
+        "summary": "Atualizar sessão",
+        "description": "Este endpoint atualiza uma sessão no sistema. O ID do filme e da sessão devem ser informados.",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "name": "movie_id",
+            "in": "path",
+            "description": "ID do filme",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da sessão",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "session",
+            "in": "body",
+            "description": "Sessão",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SessionWithoutIdAndMovieId"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retorna a sessão atualizada",
+            "schema": {
+              "$ref": "#/definitions/SessionWithoutTicket"
+            }
+          },
+          "404": {
+            "description": "Sessão não encontrada"
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar sessão",
+        "description": "Este endpoint deleta uma sessão e retorna o status da requisição. Devem ser informados o ID do filme e da sessão.",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [
+          {
+            "name": "movie_id",
+            "in": "path",
+            "description": "ID do filme",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da sessão",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Sessão deletada com sucesso."
+          },
+          "404": {
+            "description": "Sessão ou filme não encontrado."
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      }
+    },
+    "/api/movies/{movie_id}/sessions/{session_id}/tickets": {
+      "post": {
+        "summary": "Cadastrar ingresso",
+        "description": "Este endpoint cadastra um ingresso no sistema. O ID do filme e da sessão devem ser informados.",
+        "tags": [
+          "Tickets"
+        ],
+        "parameters": [
+          {
+            "name": "movie_id",
+            "in": "path",
+            "description": "ID do filme",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "session_id",
+            "in": "path",
+            "description": "ID da sessão",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "ticket",
+            "in": "body",
+            "description": "ticket a ser cadastrado",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TicketWithoutIds"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retorna a sessão atualizada",
+            "schema": {
+              "$ref": "#/definitions/Ticket"
+            }
+          },
+          "404": {
+            "description": "Sessão ou filme não encontrado"
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      }
+    },
+    "/api/movies/{movie_id}/sessions/{session_id}/tickets/{id}": {
+      "put": {
+        "summary": "Atualizar ingresso",
+        "description": "Este endpoint atualiza um ingresso no sistema. O ID do filme, da sessão e do ingresso devem ser informados.",
+        "tags": [
+          "Tickets"
+        ],
+        "parameters": [
+          {
+            "name": "movie_id",
+            "in": "path",
+            "description": "ID do filme",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "session_id",
+            "in": "path",
+            "description": "ID da sessão",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do ingresso",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "ticket",
+            "in": "body",
+            "description": "Novo ticket",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TicketWithoutIds"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retorna a sessão atualizada",
+            "schema": {
+              "$ref": "#/definitions/Ticket"
+            }
+          },
+          "404": {
+            "description": "Sessão ou filme não encontrado"
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar ingresso",
+        "description": "Este endpoint deleta um ingresso no sistema. O ID do filme, da sessão e do ingresso devem ser informados.",
+        "tags": [
+          "Tickets"
+        ],
+        "parameters": [
+          {
+            "name": "movie_id",
+            "in": "path",
+            "description": "ID do filme",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "session_id",
+            "in": "path",
+            "description": "ID da sessão",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do ingresso",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ticket deletado com sucesso."
+          },
+          "404": {
+            "description": "Sessão, filme ou ticket não encontrado"
+          },
+          "500": {
+            "description": "Ocorreu um erro inesperado."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Movie": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "actors",
+        "genre",
+        "release_date"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id do filme"
+        },
+        "name": {
+          "type": "string",
+          "description": "nome do filme"
+        },
+        "description": {
+          "type": "string",
+          "description": "descrição do filme"
+        },
+        "actors": {
+          "type": "array",
+          "description": "atores do filme",
+          "items": {
+            "type": "string"
+          }
+        },
+        "genre": {
+          "type": "string",
+          "format": "string",
+          "description": "gênero do filme"
+        },
+        "release_date": {
+          "type": "string",
+          "description": "data de lançamento do filme"
+        },
+        "sessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Session"
+          }
+        }
+      }
+    },
+    "MovieWithoutSessions": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "actors",
+        "genre",
+        "release_date"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id do filme"
+        },
+        "name": {
+          "type": "string",
+          "description": "nome do filme"
+        },
+        "description": {
+          "type": "string",
+          "description": "descrição do filme"
+        },
+        "actors": {
+          "type": "array",
+          "description": "atores do filme",
+          "items": {
+            "type": "string"
+          }
+        },
+        "genre": {
+          "type": "string",
+          "format": "string",
+          "description": "gênero do filme"
+        },
+        "release_date": {
+          "type": "string",
+          "description": "data de lançamento do filme"
+        }
+      }
+    },
+    "MovieWithoutId": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "actors",
+        "genre",
+        "release_date"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "nome do filme"
+        },
+        "description": {
+          "type": "string",
+          "description": "descrição do filme"
+        },
+        "actors": {
+          "type": "array",
+          "description": "atores do filme",
+          "items": {
+            "type": "string"
+          }
+        },
+        "genre": {
+          "type": "string",
+          "format": "string",
+          "description": "gênero do filme"
+        },
+        "release_date": {
+          "type": "string",
+          "description": "data de lançamento do filme"
+        }
+      }
+    },
+    "Session": {
+      "type": "object",
+      "required": [
+        "name",
+        "movie_id",
+        "room",
+        "capacity",
+        "day",
+        "time"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id da sessão"
+        },
+        "movie_id": {
+          "type": "integer",
+          "description": "id do filme relacionado"
+        },
+        "room": {
+          "type": "string",
+          "description": "nome da sala"
+        },
+        "capacity": {
+          "type": "integer",
+          "description": "capacidade da sala"
+        },
+        "day": {
+          "type": "string",
+          "format": "string",
+          "description": "dia da sessão"
+        },
+        "time": {
+          "type": "string",
+          "description": "horário da sessão"
+        },
+        "tickets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Ticket"
+          }
+        }
+      }
+    },
+    "SessionWithoutIdAndMovieId": {
+      "type": "object",
+      "required": [
+        "name",
+        "room",
+        "capacity",
+        "day",
+        "time"
+      ],
+      "properties": {
+        "room": {
+          "type": "string",
+          "description": "nome da sala"
+        },
+        "capacity": {
+          "type": "integer",
+          "description": "capacidade da sala"
+        },
+        "day": {
+          "type": "string",
+          "format": "string",
+          "description": "dia da sessão"
+        },
+        "time": {
+          "type": "string",
+          "description": "horário da sessão"
+        }
+      }
+    },
+    "SessionWithoutTicket": {
+      "type": "object",
+      "required": [
+        "name",
+        "room",
+        "capacity",
+        "day",
+        "time"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id da sessão"
+        },
+        "movie_id": {
+          "type": "integer",
+          "description": "id do filme relacionado"
+        },
+        "room": {
+          "type": "string",
+          "description": "nome da sala"
+        },
+        "capacity": {
+          "type": "integer",
+          "description": "capacidade da sala"
+        },
+        "day": {
+          "type": "string",
+          "format": "string",
+          "description": "dia da sessão"
+        },
+        "time": {
+          "type": "string",
+          "description": "horário da sessão"
+        }
+      }
+    },
+    "Ticket": {
+      "type": "object",
+      "required": [
+        "id",
+        "chair",
+        "value"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id do pet"
+        },
+        "session_id": {
+          "type": "integer",
+          "description": "id da sessão relacionada"
+        },
+        "chair": {
+          "type": "string",
+          "description": "identificação da cadeira"
+        },
+        "value": {
+          "type": "integer",
+          "description": "valor do ingresso"
+        }
+      }
+    },
+    "TicketWithoutIds": {
+      "type": "object",
+      "required": [
+        "chair",
+        "value"
+      ],
+      "properties": {
+        "chair": {
+          "type": "string",
+          "description": "identificação da cadeira"
+        },
+        "value": {
+          "type": "integer",
+          "description": "valor do ingresso"
+        }
+      }
+    }
+  }
+}
