@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { Session } from './Session';
+import { Movie } from './Movie';
 
 @Entity('tickets') // Nome da tabela no banco de dados
 export class Ticket {
@@ -23,10 +24,17 @@ export class Ticket {
   @Column()
   session_id!: number;
 
+  @Column()
+  movie_id!: number;
+
   @ManyToOne(() => Session, (session) => session.tickets)
   @JoinColumn({ name: 'session_id' })
   session!: Session;
 }
+//   @OneToOne(() => Movie, (movie) => movie.tickets)
+//   @JoinColumn({ name: 'movie_id' })
+//   movie!: Movie;
+// }
 
 /*
 "id": 1,
