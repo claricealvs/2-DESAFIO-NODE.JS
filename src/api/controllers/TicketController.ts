@@ -9,6 +9,15 @@ export class TicketController {
       const { chair, value } = req.body;
 
       /* verifica se a cadeira ja esta usada */
+      const disponibleChair = await this.ticketService.disponibleChair(chair);
+
+      if (disponibleChair) {
+        return res.status(400).json({
+          code: 400,
+          status: 'Bad Request',
+          message: 'A cadeira ' + chair + ' já está ocupada',
+        });
+      }
 
       //   const movie_id = req.params.movie_id;
       //   const session_id = req.params.session_id;
