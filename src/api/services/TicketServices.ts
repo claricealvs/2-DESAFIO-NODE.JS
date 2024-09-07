@@ -20,13 +20,13 @@ export class TicketService {
   }
 
   async createTicket(
-    //movie_id: number,
+    movie_id: number,
     session_id: number,
     chair: string,
     value: number,
   ): Promise<Ticket> {
     const ticket = this.ticketRepository.create({
-      //movie_id,
+      movie_id,
       session_id,
       chair,
       value,
@@ -39,7 +39,7 @@ export class TicketService {
 
   async updateTicket(
     id: string,
-    // movieId: number,
+    movie_id: number,
     session_id: number,
     chair: string,
     value: number,
@@ -53,7 +53,7 @@ export class TicketService {
     }
 
     await this.ticketRepository.update(id, {
-      // movieId,
+      movie_id,
       session_id,
       chair,
       value,
@@ -103,7 +103,7 @@ export class TicketService {
     });
 
     if (!movie) {
-      throw new Error('O filme não existe.');
+      return false;
     } else {
       return true;
     }
@@ -111,12 +111,7 @@ export class TicketService {
 
   /* adicionar service que confere a capacidade e vê se está excedida */
   async sessionFull(session_id: number): Promise<boolean> {
-    const sessionExists = this.verifySession(session_id);
-    if (!sessionExists) {
-      //retorna erro
-    }
-
-    const sessionCapacity = await parseInt(
+    const sessionCapacity = parseInt(
       this.sessionRepository
         .createQueryBuilder()
         .where({
