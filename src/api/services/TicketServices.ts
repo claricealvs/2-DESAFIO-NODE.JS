@@ -1,9 +1,11 @@
 import { Repository } from 'typeorm';
 import connect from '../../database/connection';
 import { Ticket } from '../../database/entities/Ticket';
+import { Movie } from '../../database/entities/Movie';
 
 export class TicketService {
   private ticketRepository!: Repository<Ticket>;
+  private movieRepository!: Repository<Movie>;
 
   constructor() {
     this.initializeRepository();
@@ -12,6 +14,7 @@ export class TicketService {
   private async initializeRepository() {
     const connection = await connect();
     this.ticketRepository = connection.getRepository(Ticket);
+    this.movieRepository = connection.getRepository(Movie);
   }
 
   async createTicket(
@@ -79,6 +82,18 @@ export class TicketService {
   async disponibleChair(chair: string): Promise<boolean> {
     const ticket = await this.ticketRepository.findOne({ where: { chair } });
     return !!ticket;
+  }
+
+  async verifySession(session_id: number): Promise<boolean> {
+    const session = await this.movieRepository.findOne({
+      where: { id: session_id },
+    });
+
+    if (!session) {
+      throw new Error('A sessão não existe.');
+    } else {
+      return true;
+    }
   }
 
   /* adicionar service que confere a capacidade e vê se está excedida */
