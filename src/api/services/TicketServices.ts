@@ -111,7 +111,7 @@ export class TicketService {
 
   /* adicionar service que confere a capacidade e vê se está excedida */
   async sessionFull(session_id: number): Promise<boolean> {
-    const sessionCapacity = await parseInt(
+    const sessionCapacity = parseInt(
       this.sessionRepository
         .createQueryBuilder()
         .where({
