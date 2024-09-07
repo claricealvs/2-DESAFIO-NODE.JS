@@ -102,7 +102,11 @@ export class TicketController {
       const ticketDeleted = await this.ticketService.getTicketById(id);
 
       if (!ticketDeleted) {
-        return res.status(404).json('O ingresso não existe');
+        return res.status(404).json({
+          code: 404,
+          status: 'Not Found',
+          message: 'Ingresso não encontrado',
+        });
       }
 
       await this.ticketService.deleteTicket(id);
