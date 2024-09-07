@@ -20,13 +20,13 @@ export class TicketController {
       }
 
       //   const movie_id = req.params.movie_id;
-      //   const session_id = req.params.session_id;
+      const session_id = parseInt(req.params.session_id);
 
       const ticket = await this.ticketService.createTicket(
         chair,
         value,
         //movie_id,
-        //session_id,
+        session_id,
       );
 
       return res.status(201).json(ticket);
@@ -55,11 +55,16 @@ export class TicketController {
       }
 
       //   const movie_id = req.params.movie_id;
-      //   const session_id = req.params.session_id;
+      const session_id = parseInt(req.params.session_id);
 
       const id = req.params.id;
 
-      const ticket = await this.ticketService.updateTicket(id, chair, value);
+      const ticket = await this.ticketService.updateTicket(
+        id,
+        chair,
+        value,
+        session_id,
+      );
 
       return res.status(200).json(ticket);
     } catch (error: unknown) {
