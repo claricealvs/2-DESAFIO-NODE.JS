@@ -103,7 +103,7 @@ export class TicketService {
     });
 
     if (!movie) {
-      throw new Error('O filme não existe.');
+      return false;
     } else {
       return true;
     }

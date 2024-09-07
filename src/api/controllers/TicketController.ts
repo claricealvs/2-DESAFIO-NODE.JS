@@ -7,7 +7,7 @@ export class TicketController {
   async createTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
-      //   const movie_id = req.params.movie_id;
+      const movie_id = parseInt(req.params.movie);
       const session_id = parseInt(req.params.session_id);
 
       /* verifica se a sessão existe */
@@ -29,6 +29,16 @@ export class TicketController {
           code: 400,
           status: 'Bad Request',
           message: 'A sessão está lotada.',
+        });
+      }
+
+      /* verifica se o filme existe */
+      const verifyMovie = await this.ticketService.verifyMovie(movie_id);
+      if (!verifyMovie) {
+        res.status(400).json({
+          code: 400,
+          status: 'Bad Request',
+          message: 'O filme não existe.',
         });
       }
 
