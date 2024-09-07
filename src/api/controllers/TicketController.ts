@@ -53,6 +53,20 @@ export class TicketController {
   async updateTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
+      //   const movie_id = req.params.movie_id;
+      const session_id = parseInt(req.params.session_id);
+
+      const id = req.params.id;
+
+      /* verifica se a sessão existe */
+      const verifySession = await this.ticketService.verifySession(session_id);
+      if (!verifySession) {
+        res.status(400).json({
+          code: 400,
+          status: 'Bad Request',
+          message: 'A sessão não existe.',
+        });
+      }
 
       /* verifica se a cadeira ja esta usada */
       const disponibleChair = await this.ticketService.disponibleChair(chair);
@@ -64,11 +78,6 @@ export class TicketController {
           message: 'A cadeira ' + chair + ' já está ocupada',
         });
       }
-
-      //   const movie_id = req.params.movie_id;
-      const session_id = parseInt(req.params.session_id);
-
-      const id = req.params.id;
 
       const ticket = await this.ticketService.updateTicket(
         id,
