@@ -90,10 +90,9 @@ export class TicketService {
     });
 
     if (!session) {
-      throw new Error('A sessão não existe.');
-    } else {
-      return true;
+      return false;
     }
+    return true;
   }
 
   async verifyMovie(movie_id: number): Promise<boolean> {
