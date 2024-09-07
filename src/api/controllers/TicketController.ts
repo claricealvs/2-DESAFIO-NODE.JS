@@ -21,6 +21,7 @@ export class TicketController {
 
       //   const movie_id = req.params.movie_id;
       const session_id = parseInt(req.params.session_id);
+      /* verifica se a quantidade de assentos ja esta excedida */
 
       const ticket = await this.ticketService.createTicket(
         chair,
