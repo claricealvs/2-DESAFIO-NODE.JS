@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 
 import { Session } from './Session';
-import { Movie } from './Movie';
 
 @Entity('tickets') // Nome da tabela no banco de dados
 export class Ticket {
@@ -31,14 +30,3 @@ export class Ticket {
   @JoinColumn({ name: 'session_id' })
   session!: Session;
 }
-//   @OneToOne(() => Movie, (movie) => movie.tickets)
-//   @JoinColumn({ name: 'movie_id' })
-//   movie!: Movie;
-// }
-
-/*
-"id": 1,
-  "session_id": 1,
-  "chair": "b1",
-  "value": 10
-*/
