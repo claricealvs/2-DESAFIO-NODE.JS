@@ -96,5 +96,17 @@ export class TicketService {
     }
   }
 
+  async verifyMovie(movie_id: number): Promise<boolean> {
+    const movie = await this.movieRepository.findOne({
+      where: { id: movie_id },
+    });
+
+    if (!movie) {
+      throw new Error('O filme não existe.');
+    } else {
+      return true;
+    }
+  }
+
   /* adicionar service que confere a capacidade e vê se está excedida */
 }
