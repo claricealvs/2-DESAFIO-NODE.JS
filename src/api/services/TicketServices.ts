@@ -111,11 +111,6 @@ export class TicketService {
 
   /* adicionar service que confere a capacidade e vê se está excedida */
   async sessionFull(session_id: number): Promise<boolean> {
-    const sessionExists = this.verifySession(session_id);
-    if (!sessionExists) {
-      //retorna erro
-    }
-
     const sessionCapacity = await parseInt(
       this.sessionRepository
         .createQueryBuilder()
