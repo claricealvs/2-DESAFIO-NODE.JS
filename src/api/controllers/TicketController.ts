@@ -70,6 +70,18 @@ export class TicketController {
 
       const id = req.params.id;
 
+      /* verifica se sessão está lotada */
+      const verifyFullSession =
+        await this.ticketService.sessionFull(session_id);
+
+      if (verifyFullSession) {
+        return res.status(400).json({
+          code: 400,
+          status: 'Bad Request',
+          message: 'A sessão está lotada.',
+        });
+      }
+
       /* verifica se a sessão existe */
       const verifySession = await this.ticketService.verifySession(session_id);
       if (!verifySession) {
