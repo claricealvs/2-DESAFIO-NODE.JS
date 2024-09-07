@@ -20,6 +20,18 @@ export class TicketController {
         });
       }
 
+      /* verifica se sessão está lotada */
+      const verifyFullSession =
+        await this.ticketService.sessionFull(session_id);
+
+      if (verifyFullSession) {
+        return res.status(400).json({
+          code: 400,
+          status: 'Bad Request',
+          message: 'A sessão está lotada.',
+        });
+      }
+
       /* verifica se a cadeira ja esta usada */
       const disponibleChair = await this.ticketService.disponibleChair(chair);
 
