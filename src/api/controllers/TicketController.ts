@@ -111,14 +111,20 @@ export class TicketController {
 
       await this.ticketService.deleteTicket(id);
 
-      return res
-        .status(200)
-        .json({ message: 'Ingresso deletado com sucesso.' });
+      return res.status(200).json({ message: 'status code 200' });
     } catch (error: unknown) {
       if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(400).json({
+          code: 400,
+          status: 'Bad Request',
+          message: error.message,
+        });
       } else {
-        return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
+        return res.status(500).json({
+          code: 500,
+          status: 'Internal Server Error',
+          message: 'Ocorreu um erro inesperado.',
+        });
       }
     }
   }
