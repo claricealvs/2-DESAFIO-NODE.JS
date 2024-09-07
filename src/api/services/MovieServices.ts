@@ -55,7 +55,6 @@ export class MovieService {
     actors: string[],
     genre: string,
     release_date: string,
-    image: string,
   ): Promise<Movie> {
     const existingMovie = await this.movieRepository.findOne({
       where: { name },

@@ -113,7 +113,6 @@ export class MovieController {
         actors,
         genre,
         release_date,
-        image,
       );
 
       const formatedMovie = {
