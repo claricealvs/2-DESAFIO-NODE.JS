@@ -7,6 +7,9 @@ export class TicketController {
   async createTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
+
+      /* verifica se a cadeira ja esta usada */
+
       //   const movie_id = req.params.movie_id;
       //   const session_id = req.params.session_id;
 
@@ -32,6 +35,9 @@ export class TicketController {
       const { chair, value } = req.body;
       //   const movie_id = req.params.movie_id;
       //   const session_id = req.params.session_id;
+
+      /* verifica se a cadeira ja esta usada */
+
       const id = req.params.id;
 
       const ticket = await this.ticketService.updateTicket(id, chair, value);
@@ -49,8 +55,9 @@ export class TicketController {
   async deleteTicket(req: Request, res: Response) {
     try {
       const id = req.params.id;
-
       const ticketDeleted = await this.ticketService.getTicketById(id);
+
+      /* deixa a cadeira livre */
 
       if (!ticketDeleted) {
         return res.status(404).json('O ingresso não existe');
