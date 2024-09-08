@@ -10,7 +10,6 @@ export class TicketController {
       //   const movie_id = req.params.movie_id;
       const session_id = parseInt(req.params.session_id);
 
-      /* verifica se a sessão existe */
       const verifySession = await this.ticketService.verifySession(session_id);
       if (!verifySession) {
         res.status(400).json({
@@ -20,7 +19,6 @@ export class TicketController {
         });
       }
 
-      /* verifica se sessão está lotada */
       const verifyFullSession =
         await this.ticketService.sessionFull(session_id);
 
@@ -32,8 +30,10 @@ export class TicketController {
         });
       }
 
-      /* verifica se a cadeira ja esta usada */
-      const disponibleChair = await this.ticketService.disponibleChair(chair);
+      const disponibleChair = await this.ticketService.disponibleChair(
+        chair,
+        session_id,
+      );
 
       if (disponibleChair) {
         return res.status(400).json({
@@ -43,13 +43,10 @@ export class TicketController {
         });
       }
 
-      /* verifica se a quantidade de assentos ja esta excedida */
-
       const ticket = await this.ticketService.createTicket(
+        session_id,
         chair,
         value,
-        //movie_id,
-        session_id,
       );
 
       return res.status(201).json(ticket);
@@ -93,7 +90,10 @@ export class TicketController {
       }
 
       /* verifica se a cadeira ja esta usada */
-      const disponibleChair = await this.ticketService.disponibleChair(chair);
+      const disponibleChair = await this.ticketService.disponibleChair(
+        chair,
+        session_id,
+      );
 
       if (disponibleChair) {
         return res.status(400).json({

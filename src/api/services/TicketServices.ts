@@ -16,6 +16,7 @@ export class TicketService {
   private async initializeRepository() {
     const connection = await connect();
     this.ticketRepository = connection.getRepository(Ticket);
+    this.sessionRepository = connection.getRepository(Session);
     this.movieRepository = connection.getRepository(Movie);
   }
 
@@ -81,8 +82,10 @@ export class TicketService {
     }
   }
 
-  async disponibleChair(chair: string): Promise<boolean> {
-    const ticket = await this.ticketRepository.findOne({ where: { chair } });
+  async disponibleChair(chair: string, session_id: number): Promise<boolean> {
+    const ticket = await this.ticketRepository.findOne({
+      where: { chair, session_id },
+    });
     return !!ticket;
   }
 
@@ -111,28 +114,23 @@ export class TicketService {
 
   /* adicionar service que confere a capacidade e vê se está excedida */
   async sessionFull(session_id: number): Promise<boolean> {
-    const sessionExists = this.verifySession(session_id);
-    if (!sessionExists) {
-      //retorna erro
+    const session = await this.sessionRepository.findOne({
+      where: { id: session_id },
+      select: ['capacity'], // Assumindo que a entidade 'Session' tem o campo 'capacity'
+    });
+
+    if (!session) {
+      throw new Error('A sessão não foi encontrada.');
     }
 
-    const sessionCapacity = await parseInt(
-      this.sessionRepository
-        .createQueryBuilder()
-        .where({
-          where: { id: session_id },
-        })
-        .getQuery(),
-    );
+    const sessionCapacity = session.capacity;
 
-    //pegar quantidade de tickets que já estão nessa sessao
+    // Contar quantos ingressos já estão nessa sessão
     const ticketsInSession = await this.ticketRepository.count({
       where: { session_id },
     });
 
-    if (sessionCapacity <= ticketsInSession) {
-      return false;
-    }
-    return true;
+    // Verificar se a sessão está cheia
+    return ticketsInSession >= sessionCapacity;
   }
 }

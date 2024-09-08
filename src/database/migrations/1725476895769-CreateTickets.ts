@@ -21,7 +21,7 @@ export class CreateTickets1725476895769 implements MigrationInterface {
           {
             name: 'chair',
             type: 'varchar',
-            isUnique: true,
+            isUnique: false,
           },
           {
             name: 'value',
