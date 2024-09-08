@@ -21,7 +21,6 @@ export class TicketService {
   }
 
   async createTicket(
-    movie_id: number,
     session_id: number,
     chair: string,
     value: number,
@@ -53,6 +52,7 @@ export class TicketService {
     }
 
     await this.ticketRepository.update(id, {
+      // movieId,
       session_id,
       chair,
       value,
@@ -93,10 +93,8 @@ export class TicketService {
     });
 
     if (!session) {
-      console.log('A sessão não existe');
       return false;
     }
-    console.log('A sessão existe');
     return true;
   }
 

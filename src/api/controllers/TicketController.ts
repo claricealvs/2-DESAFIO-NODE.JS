@@ -32,7 +32,6 @@ export class TicketController {
 
       /* verifica se o filme existe */
       const verifyMovie = await this.ticketService.verifyMovie(movie_id);
-      console.log('ID do filme: ' + movie_id);
       if (!verifyMovie) {
         res.status(400).json({
           code: 400,
@@ -56,7 +55,6 @@ export class TicketController {
       }
 
       const ticket = await this.ticketService.createTicket(
-        movie_id,
         session_id,
         chair,
         value,
