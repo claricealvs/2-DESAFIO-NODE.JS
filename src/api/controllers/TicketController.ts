@@ -7,7 +7,7 @@ export class TicketController {
   async createTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
-      //   const movie_id = req.params.movie_id;
+      const movie_id = parseInt(req.params.movie);
       const session_id = parseInt(req.params.session_id);
 
       const verifySession = await this.ticketService.verifySession(session_id);
@@ -30,6 +30,17 @@ export class TicketController {
         });
       }
 
+      /* verifica se o filme existe */
+      const verifyMovie = await this.ticketService.verifyMovie(movie_id);
+      if (!verifyMovie) {
+        res.status(400).json({
+          code: 400,
+          status: 'Bad Request',
+          message: 'O filme não existe.',
+        });
+      }
+
+      /* verifica se a cadeira ja esta usada */
       const disponibleChair = await this.ticketService.disponibleChair(
         chair,
         session_id,
@@ -44,6 +55,7 @@ export class TicketController {
       }
 
       const ticket = await this.ticketService.createTicket(
+        movie_id,
         session_id,
         chair,
         value,
@@ -62,7 +74,7 @@ export class TicketController {
   async updateTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
-      //   const movie_id = req.params.movie_id;
+      const movie_id = parseInt(req.params.movie_id);
       const session_id = parseInt(req.params.session_id);
 
       const id = req.params.id;
@@ -105,9 +117,10 @@ export class TicketController {
 
       const ticket = await this.ticketService.updateTicket(
         id,
+        movie_id,
+        session_id,
         chair,
         value,
-        session_id,
       );
 
       return res.status(200).json(ticket);

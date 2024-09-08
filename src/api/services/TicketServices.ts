@@ -21,13 +21,13 @@ export class TicketService {
   }
 
   async createTicket(
-    //movie_id: number,
+    movie_id: number,
     session_id: number,
     chair: string,
     value: number,
   ): Promise<Ticket> {
     const ticket = this.ticketRepository.create({
-      //movie_id,
+      movie_id,
       session_id,
       chair,
       value,
@@ -40,7 +40,7 @@ export class TicketService {
 
   async updateTicket(
     id: string,
-    // movieId: number,
+    movie_id: number,
     session_id: number,
     chair: string,
     value: number,
@@ -54,7 +54,7 @@ export class TicketService {
     }
 
     await this.ticketRepository.update(id, {
-      // movieId,
+      movie_id,
       session_id,
       chair,
       value,
@@ -106,7 +106,7 @@ export class TicketService {
     });
 
     if (!movie) {
-      throw new Error('O filme não existe.');
+      return false;
     } else {
       return true;
     }
