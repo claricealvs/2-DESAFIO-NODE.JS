@@ -7,7 +7,7 @@ export class TicketController {
   async createTicket(req: Request, res: Response) {
     try {
       const { chair, value } = req.body;
-      const movie_id = parseInt(req.params.movie);
+      const movie_id = parseInt(req.params.movie_id);
       const session_id = parseInt(req.params.session_id);
 
       const verifySession = await this.ticketService.verifySession(session_id);
@@ -32,6 +32,7 @@ export class TicketController {
 
       /* verifica se o filme existe */
       const verifyMovie = await this.ticketService.verifyMovie(movie_id);
+      console.log('ID do filme: ' + movie_id);
       if (!verifyMovie) {
         res.status(400).json({
           code: 400,

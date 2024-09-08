@@ -23,9 +23,6 @@ export class Ticket {
   @Column()
   session_id!: number;
 
-  @Column()
-  movie_id!: number;
-
   @ManyToOne(() => Session, (session) => session.tickets)
   @JoinColumn({ name: 'session_id' })
   session!: Session;

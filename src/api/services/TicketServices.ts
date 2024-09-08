@@ -27,7 +27,6 @@ export class TicketService {
     value: number,
   ): Promise<Ticket> {
     const ticket = this.ticketRepository.create({
-      movie_id,
       session_id,
       chair,
       value,
@@ -54,7 +53,6 @@ export class TicketService {
     }
 
     await this.ticketRepository.update(id, {
-      movie_id,
       session_id,
       chair,
       value,
@@ -95,8 +93,10 @@ export class TicketService {
     });
 
     if (!session) {
+      console.log('A sessão não existe');
       return false;
     }
+    console.log('A sessão existe');
     return true;
   }
 
