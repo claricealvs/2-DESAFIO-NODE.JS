@@ -12,8 +12,8 @@ export class TicketController {
 
       const verifySession = await this.ticketService.verifySession(session_id);
       if (!verifySession) {
-        res.status(400).json({
-          code: 400,
+        res.status(404).json({
+          code: 404,
           status: 'Bad Request',
           message: 'A sessão não existe.',
         });
@@ -33,8 +33,8 @@ export class TicketController {
       /* verifica se o filme existe */
       const verifyMovie = await this.ticketService.verifyMovie(movie_id);
       if (!verifyMovie) {
-        res.status(400).json({
-          code: 400,
+        res.status(404).json({
+          code: 404,
           status: 'Bad Request',
           message: 'O filme não existe.',
         });
@@ -62,11 +62,7 @@ export class TicketController {
 
       return res.status(201).json(ticket);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
-      } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
-      }
     }
   }
 
@@ -93,8 +89,8 @@ export class TicketController {
       /* verifica se a sessão existe */
       const verifySession = await this.ticketService.verifySession(session_id);
       if (!verifySession) {
-        res.status(400).json({
-          code: 400,
+        res.status(404).json({
+          code: 404,
           status: 'Bad Request',
           message: 'A sessão não existe.',
         });
@@ -147,7 +143,7 @@ export class TicketController {
 
       await this.ticketService.deleteTicket(id);
 
-      return res.status(200).json({ message: 'status code 200' });
+      return res.status(204).json();
     } catch (error: unknown) {
       if (error instanceof Error) {
         return res.status(400).json({
