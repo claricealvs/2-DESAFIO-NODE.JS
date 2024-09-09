@@ -47,11 +47,13 @@ npm start
 ```
 
 5. **Acesse a API**
-   A aplicação estará disponível no endereço `http://localhost:3000`.
+
+A aplicação estará disponível no endereço `http://localhost:3000`.
 
 6. **Acesse a API no Swagger**
-   A aplicação estará disponível no endereço:
-   `http://localhost:3000/api/documentation/`
+
+A aplicação estará disponível no endereço:
+`http://localhost:3000/api/documentation/`
 
 ![swagger](/assets/swagger-compacine.png)
 
@@ -78,6 +80,7 @@ Aqui estão os endpoints disponíveis na API:
   - `DELETE api/movies/{movie_id}/sessions/{id}`: Deletar uma sessão
 
 - **Tickets**
+
   - `POST api/movies/{movie_id}/sessions/{session_id}/tickets`: Cadastrar um novo ingresso
   - `PUT api/movies/{movie_id}/sessions/{session_id}/tickets/{id}`: Atualizar um ingresso
   - `DELETE api/movies/{movie_id}/sessions/{session_id}/tickets/{id}`: Deletar um ingresso
