@@ -61,7 +61,7 @@ npm start
 
 ## 🌐 Endpoints da API
 
-Aqui estão os principais endpoints disponíveis na API:
+Aqui estão os endpoints disponíveis na API:
 
 - **Movies**
 
