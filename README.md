@@ -48,12 +48,12 @@ npm start
 
 5. **Acesse a API**
 
-A aplicação estará disponível no endereço `http://localhost:3000`.
+    A aplicação estará disponível no endereço `http://localhost:3000`.
 
 6. **Acesse a API no Swagger**
 
-A aplicação estará disponível no endereço:
-`http://localhost:3000/api/documentation/`
+    A aplicação estará disponível no endereço:
+    `http://localhost:3000/api/documentation/`
 
 ![swagger](/assets/swagger-compacine.png)
 
