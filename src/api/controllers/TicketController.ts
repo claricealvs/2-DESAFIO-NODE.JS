@@ -115,7 +115,7 @@ export class TicketController {
       }
 
       const ticket = await this.ticketService.updateTicket(
-        id,
+        parseInt(id),
         movie_id,
         session_id,
         chair,

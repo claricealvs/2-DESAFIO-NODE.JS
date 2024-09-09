@@ -37,7 +37,7 @@ export class TicketService {
   }
 
   async updateTicket(
-    id: string,
+    id: number,
     movie_id: number,
     session_id: number,
     chair: string,
