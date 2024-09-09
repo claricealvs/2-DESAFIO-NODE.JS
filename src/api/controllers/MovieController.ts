@@ -1,5 +1,5 @@
 // src/controllers/MovieController.ts
-import { Request, Response } from 'express';
+import { json, Request, Response } from 'express';
 import { MovieService } from '../services/MovieServices';
 import { format } from 'date-fns';
 import { pt as ptBR } from 'date-fns/locale';
@@ -40,7 +40,7 @@ export class MovieController {
       if (error instanceof Error) {
         res.status(500).json({ message: error.message });
       } else {
-        res.status(500).json({ message: 'Unknown error occurred' });
+        res.status(500).json({ message: 'Erro desconhecido!' });
       }
     }
   }
@@ -85,11 +85,7 @@ export class MovieController {
         })),
       });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        return res.status(500).json({ error: error.message });
-      } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
-      }
     }
   }
 
@@ -187,7 +183,7 @@ export class MovieController {
       });
     } else {
       await this.movieService.deleteMovie(movie.id);
-      res.status(400);
+      return res.status(204).json();
     }
   }
 }
