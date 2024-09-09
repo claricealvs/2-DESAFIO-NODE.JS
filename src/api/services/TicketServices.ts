@@ -42,7 +42,7 @@ export class TicketService {
     session_id: number,
     chair: string,
     value: number,
-  ): Promise<void> {
+  ) {
     const existingTicket = await this.ticketRepository.findOne({
       where: { id },
     });
@@ -51,12 +51,20 @@ export class TicketService {
       throw new Error('O ingresso não existe.');
     }
 
+    const updatedTicket = {
+      id,
+      session_id,
+      chair,
+      value,
+    };
     await this.ticketRepository.update(id, {
       // movieId,
       session_id,
       chair,
       value,
     });
+
+    return updatedTicket;
   }
 
   async deleteTicket(id: string): Promise<void> {
