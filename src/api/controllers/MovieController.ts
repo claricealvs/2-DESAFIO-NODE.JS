@@ -176,11 +176,6 @@ export class MovieController {
 
     if (!movie) {
       res.status(404).json({ message: 'Filme não encontrado' });
-    } else if (movie && movie.sessions && movie.sessions.length > 0) {
-      return res.status(400).json({
-        message:
-          'O filme possui sessões cadastradas, remova as sessões antes de excluir o filme',
-      });
     } else {
       await this.movieService.deleteMovie(movie.id);
       return res.status(204).json();

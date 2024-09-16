@@ -40,6 +40,7 @@ export class CreateTickets1725476895769 implements MigrationInterface {
         columnNames: ['session_id'],
         referencedTableName: 'sessions',
         referencedColumnNames: ['id'],
+        onDelete: 'CASCADE',
       }),
     );
   }
