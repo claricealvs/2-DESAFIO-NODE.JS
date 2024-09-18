@@ -104,6 +104,14 @@ export class SessionService {
     day: string,
     time: string,
   ) {
+    const existingSession = await this.sessionRepository.findOne({
+      where: { id },
+    });
+
+    if (!existingSession) {
+      throw new Error('A sessão inserida não existe.');
+    }
+
     // Verificar se há outra sessão no mesmo horário e sala (excluindo a que está sendo atualizada)
     const validSession = await this.sessionRepository.findOne({
       where: { room, time }, // Garante que não é a mesma sessão
