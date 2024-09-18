@@ -43,11 +43,11 @@ export class SessionService {
       where: { room, time },
     });
 
-    if (![room, day, time].every(value => typeof value === 'string')) {
+    if (![room, day, time].every((value) => typeof value === 'string')) {
       throw new Error('Valor incompatível de dados.');
     }
 
-    if (![capacity].every(value => typeof value === 'number')) {
+    if (![capacity].every((value) => typeof value === 'number')) {
       throw new Error('Valor incompatível de dados.');
     }
 
