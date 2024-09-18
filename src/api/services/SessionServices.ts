@@ -110,7 +110,9 @@ export class SessionService {
     });
 
     if (existingSession) {
-      throw new Error('Sessões não podem ocorrer no mesmo horário.');
+      throw new Error(
+        'Sessões não podem ocorrer no mesmo horário e na mesma sala.',
+      );
     }
 
     if (
