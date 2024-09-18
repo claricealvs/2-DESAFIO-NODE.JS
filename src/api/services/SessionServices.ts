@@ -1,4 +1,4 @@
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import connect from '../../database/connection';
 import { Session } from '../../database/entities/Session';
 import { Movie } from '../../database/entities/Movie';
