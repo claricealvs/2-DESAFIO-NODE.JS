@@ -43,6 +43,10 @@ export class SessionService {
       where: { room, time },
     });
 
+    if (![room, day, time, capacity].every((value) => typeof value === null)) {
+      throw new Error('Todos os campos são requeridos.');
+    }
+
     if (![room, day, time].every((value) => typeof value === 'string')) {
       throw new Error('Valor incompatível de dados.');
     }
