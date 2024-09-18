@@ -105,11 +105,11 @@ export class SessionService {
     time: string,
   ) {
     // Verificar se há outra sessão no mesmo horário e sala (excluindo a que está sendo atualizada)
-    const existingSession = await this.sessionRepository.findOne({
+    const validSession = await this.sessionRepository.findOne({
       where: { room, time }, // Garante que não é a mesma sessão
     });
 
-    if (existingSession) {
+    if (validSession) {
       throw new Error(
         'Sessões não podem ocorrer no mesmo horário e na mesma sala.',
       );
