@@ -113,6 +113,22 @@ export class SessionService {
       throw new Error('Sessões não podem ocorrer no mesmo horário.');
     }
 
+    if (
+      [room, day, time, capacity].some(
+        (value) => typeof value === null || value === undefined || value === '',
+      )
+    ) {
+      throw new Error('Todos os campos são requeridos.');
+    }
+
+    if (![room, day, time].every((value) => typeof value === 'string')) {
+      throw new Error('Valor incompatível de dados.');
+    }
+
+    if (![capacity].every((value) => typeof value === 'number')) {
+      throw new Error('Valor incompatível de dados.');
+    }
+
     const movie = await this.movieRepository.findOne(movie_id);
 
     if (!movie) {
