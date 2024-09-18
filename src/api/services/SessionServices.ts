@@ -43,7 +43,11 @@ export class SessionService {
       where: { room, time },
     });
 
-    if (![room, day, time, capacity].every((value) => typeof value === null)) {
+    if (
+      [room, day, time, capacity].some(
+        (value) => typeof value === null || value === undefined || value === '',
+      )
+    ) {
       throw new Error('Todos os campos são requeridos.');
     }
 
