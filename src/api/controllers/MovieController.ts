@@ -94,15 +94,6 @@ export class MovieController {
       const { name, description, actors, genre, release_date, image } =
         req.body;
 
-      if (
-        !Array.isArray(actors) ||
-        actors.some((actor) => typeof actor !== 'string')
-      ) {
-        return res
-          .status(400)
-          .json({ error: 'A lista de atores deve ser um array de strings.' }); // Formato da lista de atores
-      }
-
       const newMovie = await this.movieService.createMovie(
         name,
         description,
@@ -121,7 +112,23 @@ export class MovieController {
       return res.status(201).json(formatedMovie);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
+        const code = (error as any).status || 400; // Verifica se o erro tem um status definido, senão usa 400
+
+        let statusMessage = '';
+
+        if (code == 400) {
+          statusMessage = 'Bad Request';
+        }
+
+        if (code == 404) {
+          statusMessage = 'Not Found';
+        }
+
+        return res.status(code).json({
+          code: code,
+          status: statusMessage,
+          message: error.message,
+        });
       } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
       }
@@ -133,15 +140,6 @@ export class MovieController {
       const { name, description, actors, genre, release_date } = req.body;
 
       const id = req.params.id;
-
-      if (
-        !Array.isArray(actors) ||
-        actors.some((actor) => typeof actor !== 'string')
-      ) {
-        return res
-          .status(400)
-          .json({ error: 'A lista de atores deve ser um array de strings.' });
-      }
 
       const newMovie = await this.movieService.updateMovie(
         parseInt(id, 10),
@@ -162,7 +160,23 @@ export class MovieController {
       return res.status(201).json(formatedMovie);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
+        const code = (error as any).status || 400; // Verifica se o erro tem um status definido, senão usa 400
+
+        let statusMessage = '';
+
+        if (code == 400) {
+          statusMessage = 'Bad Request';
+        }
+
+        if (code == 404) {
+          statusMessage = 'Not Found';
+        }
+
+        return res.status(code).json({
+          code: code,
+          status: statusMessage,
+          message: error.message,
+        });
       } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
       }

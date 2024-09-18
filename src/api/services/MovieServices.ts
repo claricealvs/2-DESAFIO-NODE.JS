@@ -60,20 +60,42 @@ export class MovieService {
       where: { name },
     });
 
+    if ([name, description, actors, genre, release_date].some((value) => typeof value === null || value === undefined || value === '',)) {
+      throw new Error('Todos os campos são requeridos. {name, description, actors, genre, release_date}');
+    }
+
     // Filme já existe
     if (existingMovie) {
       throw new Error('Filme já cadastrado.');
     }
 
+    if (typeof name !== "string"){
+      throw new Error('Campo {name} deve ser uma string');
+    }
+
     // Limite de caracteres para descrição
     const MAX_DESCRIPTION_LENGTH = 100;
 
-    if (description.length > MAX_DESCRIPTION_LENGTH) {
+    if (description.length > MAX_DESCRIPTION_LENGTH || typeof description !== "string") {
       throw new Error(
-        `A descrição do filme não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
+        `A descrição do filme deve ser uma 'string' e não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
       );
     }
+    
+    if (!Array.isArray(actors) ||actors.some((actor) => typeof actor !== 'string')){
+      throw new Error('Campo {actors} deve ser uma lista de strings')
+    }
 
+    if (typeof genre !== "string"){
+      throw new Error('Campo {genre} deve ser uma string');
+    }
+
+    const regexDate = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    console.log(release_date)
+    if(!regexDate.test(release_date)){
+      throw new Error('Campo {release_date} deve ter o formato: dd/mm/yyy')
+    }
     // Converter release_date para Date
     const releaseDate = new Date(release_date);
     // Verificar se a data é válida
@@ -108,6 +130,47 @@ export class MovieService {
     genre: string,
     release_date: string,
   ) {
+
+    if ([name, description, actors, genre, release_date].some((value) => typeof value === null || value === undefined || value === '',)) {
+      throw new Error('Todos os campos são requeridos. {name, description, actors, genre, release_date}');
+    }
+
+    if (typeof name !== "string"){
+      throw new Error('Campo {name} deve ser uma string');
+    }
+
+    // Limite de caracteres para descrição
+    const MAX_DESCRIPTION_LENGTH = 100;
+
+    if (description.length > MAX_DESCRIPTION_LENGTH || typeof description !== "string") {
+      throw new Error(
+        `A descrição do filme deve ser uma 'string' e não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
+      );
+    }
+    
+    if (!Array.isArray(actors) ||actors.some((actor) => typeof actor !== 'string')){
+      throw new Error('Campo {actors} deve ser uma lista de strings')
+    }
+
+    if (typeof genre !== "string"){
+      throw new Error('Campo {genre} deve ser uma string');
+    }
+
+    const regexDate = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    console.log(release_date)
+    if(!regexDate.test(release_date)){
+      throw new Error('Campo {release_date} deve ter o formato: dd/mm/yyy')
+    }
+    // Converter release_date para Date
+    const releaseDate = new Date(release_date);
+    // Verificar se a data é válida
+    if (isNaN(releaseDate.getTime())) {
+      throw new Error(
+        'Data de lançamento inválida. Certifique-se de que a data está no formato correto.',
+      );
+    }
+    
     // Verifica se o filme a ser alterado existe
     const existingMovie = await this.movieRepository.findOne({ where: { id } });
 
@@ -122,22 +185,6 @@ export class MovieService {
 
     if (anotherMovieWithSameName && anotherMovieWithSameName.id !== id) {
       throw new Error('Existe outro filme com esse nome!!!.');
-    }
-
-    // Limite de 100 chars para descrição
-    const MAX_DESCRIPTION_LENGTH = 100;
-    if (description.length > MAX_DESCRIPTION_LENGTH) {
-      throw new Error(
-        `A descrição do filme não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
-      );
-    }
-
-    // Formata a data de lançamento
-    const releaseDate = new Date(release_date);
-    if (isNaN(releaseDate.getTime())) {
-      throw new Error(
-        'Data de lançamento inválida. Certifique-se de que a data está no formato correto.',
-      );
     }
 
     // Converte a lista de atores para string
