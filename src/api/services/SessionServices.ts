@@ -1,4 +1,4 @@
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import connect from '../../database/connection';
 import { Session } from '../../database/entities/Session';
 import { Movie } from '../../database/entities/Movie';
@@ -42,6 +42,22 @@ export class SessionService {
     const existingSession = await this.sessionRepository.findOne({
       where: { room, time },
     });
+
+    if (
+      [room, day, time, capacity].some(
+        (value) => typeof value === null || value === undefined || value === '',
+      )
+    ) {
+      throw new Error('Todos os campos são requeridos.');
+    }
+
+    if (![room, day, time].every((value) => typeof value === 'string')) {
+      throw new Error('Valor incompatível de dados.');
+    }
+
+    if (![capacity].every((value) => typeof value === 'number')) {
+      throw new Error('Valor incompatível de dados.');
+    }
 
     if (existingSession) {
       throw new Error(
@@ -88,13 +104,39 @@ export class SessionService {
     day: string,
     time: string,
   ) {
-    // Verificar se há outra sessão no mesmo horário e sala (excluindo a que está sendo atualizada)
     const existingSession = await this.sessionRepository.findOne({
+      where: { id },
+    });
+
+    if (!existingSession) {
+      throw new Error('A sessão inserida não existe.');
+    }
+
+    // Verificar se há outra sessão no mesmo horário e sala (excluindo a que está sendo atualizada)
+    const validSession = await this.sessionRepository.findOne({
       where: { room, time }, // Garante que não é a mesma sessão
     });
 
-    if (existingSession) {
-      throw new Error('Sessões não podem ocorrer no mesmo horário.');
+    if (validSession) {
+      throw new Error(
+        'Sessões não podem ocorrer no mesmo horário e na mesma sala.',
+      );
+    }
+
+    if (
+      [room, day, time, capacity].some(
+        (value) => typeof value === null || value === undefined || value === '',
+      )
+    ) {
+      throw new Error('Todos os campos são requeridos.');
+    }
+
+    if (![room, day, time].every((value) => typeof value === 'string')) {
+      throw new Error('Valor incompatível de dados.');
+    }
+
+    if (![capacity].every((value) => typeof value === 'number')) {
+      throw new Error('Valor incompatível de dados.');
     }
 
     const movie = await this.movieRepository.findOne(movie_id);
