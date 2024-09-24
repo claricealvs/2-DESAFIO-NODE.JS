@@ -48,6 +48,7 @@ export class CreateSessions1725394167545 implements MigrationInterface {
         columnNames: ['movie_id'],
         referencedTableName: 'movies',
         referencedColumnNames: ['id'],
+        onDelete: 'CASCADE',
       }),
     );
   }

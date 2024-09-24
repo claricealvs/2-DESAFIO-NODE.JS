@@ -1,5 +1,5 @@
 // src/controllers/MovieController.ts
-import { Request, Response } from 'express';
+import { json, Request, Response } from 'express';
 import { MovieService } from '../services/MovieServices';
 import { format } from 'date-fns';
 import { pt as ptBR } from 'date-fns/locale';
@@ -15,14 +15,14 @@ export class MovieController {
         id: movie.id,
         name: movie.name,
         description: movie.description,
-        actors: movie.actors.split(','), // Separar os atores em um array
+        actors: movie.actors.split(','), // Array de atores
         genre: movie.genre,
         release_date: format(movie.release_date, 'dd/MM/yyyy HH:mm:ss', {
           locale: ptBR,
         }),
         sessions: movie.sessions.map((session) => ({
           id: session.id,
-          movie_id: session.movie_id, // Exibir apenas o ID do filme
+          movie_id: session.movie_id, // ID do filme
           room: session.room,
           capacity: session.capacity,
           day: session.day,
@@ -40,7 +40,7 @@ export class MovieController {
       if (error instanceof Error) {
         res.status(500).json({ message: error.message });
       } else {
-        res.status(500).json({ message: 'Unknown error occurred' });
+        res.status(500).json({ message: 'Erro desconhecido!' });
       }
     }
   }
@@ -51,28 +51,28 @@ export class MovieController {
     try {
       const movie = await this.movieService.getMovieById(parseInt(id, 10));
 
-      // Verifica se o filme foi encontrado
+      //  Filme não foi encontrado
       if (!movie) {
         return res.status(404).json({ error: 'Filme não encontrado.' });
       }
 
-      // Formatar a release_date se for um objeto Date válido
+      // Formatação da data de lançamento
       const formattedReleaseDate =
         movie.release_date instanceof Date
           ? format(movie.release_date, 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })
-          : null; // Ou outra lógica de tratamento de erro
+          : null;
 
-      // Retornar o filme com os campos na ordem desejada
+      // Ordena os campos do filmes conforme o desejado
       return res.status(200).json({
         id: movie.id,
         name: movie.name,
         description: movie.description,
-        actors: movie.actors.split(','), // Mantém como array de strings
+        actors: movie.actors.split(','), // Atores como array
         genre: movie.genre,
-        release_date: formattedReleaseDate, // Adiciona a data formatada
+        release_date: formattedReleaseDate, // Data formatada
         sessions: movie.sessions.map((session) => ({
           id: session.id,
-          movie_id: session.movie_id, // Retorna apenas o id do filme
+          movie_id: session.movie_id, // ID do filme na seção
           room: session.room,
           capacity: session.capacity,
           day: session.day,
@@ -85,11 +85,7 @@ export class MovieController {
         })),
       });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        return res.status(500).json({ error: error.message });
-      } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
-      }
     }
   }
 
@@ -98,22 +94,12 @@ export class MovieController {
       const { name, description, actors, genre, release_date, image } =
         req.body;
 
-      if (
-        !Array.isArray(actors) ||
-        actors.some((actor) => typeof actor !== 'string')
-      ) {
-        return res
-          .status(400)
-          .json({ error: 'A lista de atores deve ser um array de strings.' });
-      }
-
       const newMovie = await this.movieService.createMovie(
         name,
         description,
         actors,
         genre,
         release_date,
-        image,
       );
 
       const formatedMovie = {
@@ -126,7 +112,23 @@ export class MovieController {
       return res.status(201).json(formatedMovie);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
+        const code = (error as any).status || 400; // Verifica se o erro tem um status definido, senão usa 400
+
+        let statusMessage = '';
+
+        if (code == 400) {
+          statusMessage = 'Bad Request';
+        }
+
+        if (code == 404) {
+          statusMessage = 'Not Found';
+        }
+
+        return res.status(code).json({
+          code: code,
+          status: statusMessage,
+          message: error.message,
+        });
       } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
       }
@@ -138,15 +140,6 @@ export class MovieController {
       const { name, description, actors, genre, release_date } = req.body;
 
       const id = req.params.id;
-
-      if (
-        !Array.isArray(actors) ||
-        actors.some((actor) => typeof actor !== 'string')
-      ) {
-        return res
-          .status(400)
-          .json({ error: 'A lista de atores deve ser um array de strings.' });
-      }
 
       const newMovie = await this.movieService.updateMovie(
         parseInt(id, 10),
@@ -167,7 +160,23 @@ export class MovieController {
       return res.status(201).json(formatedMovie);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        return res.status(400).json({ error: error.message });
+        const code = (error as any).status || 400; // Verifica se o erro tem um status definido, senão usa 400
+
+        let statusMessage = '';
+
+        if (code == 400) {
+          statusMessage = 'Bad Request';
+        }
+
+        if (code == 404) {
+          statusMessage = 'Not Found';
+        }
+
+        return res.status(code).json({
+          code: code,
+          status: statusMessage,
+          message: error.message,
+        });
       } else {
         return res.status(500).json({ error: 'Ocorreu um erro inesperado.' });
       }
@@ -181,14 +190,9 @@ export class MovieController {
 
     if (!movie) {
       res.status(404).json({ message: 'Filme não encontrado' });
-    } else if (movie && movie.sessions && movie.sessions.length > 0) {
-      return res.status(400).json({
-        message:
-          'O filme possui sessões cadastradas, remova as sessões antes de excluir o filme',
-      });
     } else {
       await this.movieService.deleteMovie(movie.id);
-      res.status(400);
+      return res.status(204).json();
     }
   }
 }

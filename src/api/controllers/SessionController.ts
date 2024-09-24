@@ -96,8 +96,8 @@ export class SessionController {
       const id = req.params.id;
 
       const newSession = await this.sessionService.updateSession(
-        parseInt(movie_id, 10),
         parseInt(id, 10),
+        parseInt(movie_id, 10),
         room,
         capacity,
         day,

@@ -55,26 +55,47 @@ export class MovieService {
     actors: string[],
     genre: string,
     release_date: string,
-    image: string,
   ): Promise<Movie> {
-    // Verificar se o filme já existe
     const existingMovie = await this.movieRepository.findOne({
       where: { name },
     });
 
+    if ([name, description, actors, genre, release_date].some((value) => typeof value === null || value === undefined || value === '',)) {
+      throw new Error('Todos os campos são requeridos. {name, description, actors, genre, release_date}');
+    }
+
+    // Filme já existe
     if (existingMovie) {
       throw new Error('Filme já cadastrado.');
     }
 
-    // Definir limite de caracteres para a descrição
-    const MAX_DESCRIPTION_LENGTH = 100;
-    // Validar descrição
-    if (description.length > MAX_DESCRIPTION_LENGTH) {
-      throw new Error(
-        `A descrição do filme não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
-      );
+    if (typeof name !== "string"){
+      throw new Error('Campo {name} deve ser uma string');
     }
 
+    // Limite de caracteres para descrição
+    const MAX_DESCRIPTION_LENGTH = 100;
+
+    if (description.length > MAX_DESCRIPTION_LENGTH || typeof description !== "string") {
+      throw new Error(
+        `A descrição do filme deve ser uma 'string' e não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
+      );
+    }
+    
+    if (!Array.isArray(actors) ||actors.some((actor) => typeof actor !== 'string')){
+      throw new Error('Campo {actors} deve ser uma lista de strings')
+    }
+
+    if (typeof genre !== "string"){
+      throw new Error('Campo {genre} deve ser uma string');
+    }
+
+    const regexDate = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    console.log(release_date)
+    if(!regexDate.test(release_date)){
+      throw new Error('Campo {release_date} deve ter o formato: dd/mm/yyy')
+    }
     // Converter release_date para Date
     const releaseDate = new Date(release_date);
     // Verificar se a data é válida
@@ -84,12 +105,13 @@ export class MovieService {
       );
     }
 
+    // converte os atores para string para poder armazenar no banco
     const actorsString = actors.join(',');
-    // Criar novo filme
+    // Cria filme
     const newMovie = this.movieRepository.create({
       name,
       description,
-      actors: actorsString, // Isso deve ser um array de strings
+      actors: actorsString, // atores como string
       genre,
       release_date: releaseDate,
     });
@@ -108,12 +130,55 @@ export class MovieService {
     genre: string,
     release_date: string,
   ) {
+
+    if ([name, description, actors, genre, release_date].some((value) => typeof value === null || value === undefined || value === '',)) {
+      throw new Error('Todos os campos são requeridos. {name, description, actors, genre, release_date}');
+    }
+
+    if (typeof name !== "string"){
+      throw new Error('Campo {name} deve ser uma string');
+    }
+
+    // Limite de caracteres para descrição
+    const MAX_DESCRIPTION_LENGTH = 100;
+
+    if (description.length > MAX_DESCRIPTION_LENGTH || typeof description !== "string") {
+      throw new Error(
+        `A descrição do filme deve ser uma 'string' e não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
+      );
+    }
+    
+    if (!Array.isArray(actors) ||actors.some((actor) => typeof actor !== 'string')){
+      throw new Error('Campo {actors} deve ser uma lista de strings')
+    }
+
+    if (typeof genre !== "string"){
+      throw new Error('Campo {genre} deve ser uma string');
+    }
+
+    const regexDate = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    console.log(release_date)
+    if(!regexDate.test(release_date)){
+      throw new Error('Campo {release_date} deve ter o formato: dd/mm/yyy')
+    }
+    // Converter release_date para Date
+    const releaseDate = new Date(release_date);
+    // Verificar se a data é válida
+    if (isNaN(releaseDate.getTime())) {
+      throw new Error(
+        'Data de lançamento inválida. Certifique-se de que a data está no formato correto.',
+      );
+    }
+    
+    // Verifica se o filme a ser alterado existe
     const existingMovie = await this.movieRepository.findOne({ where: { id } });
 
     if (!existingMovie) {
       throw new Error('Não foi possível encontrar filme para alterar.');
     }
 
+    // Verifica se já tem outro filme com o mesmo nome
     const anotherMovieWithSameName = await this.movieRepository.findOne({
       where: { name },
     });
@@ -122,20 +187,7 @@ export class MovieService {
       throw new Error('Existe outro filme com esse nome!!!.');
     }
 
-    const MAX_DESCRIPTION_LENGTH = 100;
-    if (description.length > MAX_DESCRIPTION_LENGTH) {
-      throw new Error(
-        `A descrição do filme não pode exceder ${MAX_DESCRIPTION_LENGTH} caracteres.`,
-      );
-    }
-
-    const releaseDate = new Date(release_date);
-    if (isNaN(releaseDate.getTime())) {
-      throw new Error(
-        'Data de lançamento inválida. Certifique-se de que a data está no formato correto.',
-      );
-    }
-
+    // Converte a lista de atores para string
     const actorsString = actors.join(',');
 
     // Atualizar o filme existente
@@ -161,4 +213,3 @@ export class MovieService {
     await this.movieRepository.delete(id);
   }
 }
-// Adicione outros métodos de serviço conforme necessário

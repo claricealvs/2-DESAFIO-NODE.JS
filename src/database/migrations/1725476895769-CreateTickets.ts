@@ -21,7 +21,7 @@ export class CreateTickets1725476895769 implements MigrationInterface {
           {
             name: 'chair',
             type: 'varchar',
-            isUnique: true,
+            isUnique: false,
           },
           {
             name: 'value',
@@ -40,6 +40,7 @@ export class CreateTickets1725476895769 implements MigrationInterface {
         columnNames: ['session_id'],
         referencedTableName: 'sessions',
         referencedColumnNames: ['id'],
+        onDelete: 'CASCADE',
       }),
     );
   }
